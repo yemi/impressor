@@ -1,0 +1,7 @@
+{
+  "name": "ajax",
+  "private": true,
+  "dependencies": {
+    "purescript-halogen": "master"
+  }
+}
