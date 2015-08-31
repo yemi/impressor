@@ -1,5 +1,5 @@
 {
-  "name": "ajax",
+  "name": "impressor",
   "private": true,
   "dependencies": {
     "purescript-halogen": "master",

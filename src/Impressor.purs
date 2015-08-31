@@ -45,10 +45,11 @@ processImage size = do
   image <- getImageById "image"
   imageDimensions <- getImageDimensions image
 
-  let props = croppingProps imageDimensions size
   setCanvasWidth size.w canvas
   setCanvasHeight size.h canvas
-  drawImageScale ctx image 0.0 0.0 size.w size.h 
+
+  let props = croppingProps imageDimensions size
+  drawImageFull ctx image 0.0 0.0 props.w props.h props.left props.top size.w size.h
   canvasToDataURL canvas
 
 main :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
