@@ -4,6 +4,7 @@
 var gulp = require("gulp");
 var purescript = require("gulp-purescript");
 var webpack = require("webpack-stream");
+var uglify = require("gulp-uglify");
 
 var sources = [
   "src/**/*.purs",
@@ -11,7 +12,8 @@ var sources = [
 ];
 
 var foreigns = [
-  "bower_components/purescript-*/src/**/*.js"
+  "bower_components/purescript-*/src/**/*.js",
+  "src/**/*.js"
 ];
 
 gulp.task("make", function() {
@@ -22,7 +24,7 @@ gulp.task("prebundle", ["make"], function() {
   return purescript.pscBundle({
     src: "output/**/*.js",
     output: "dist/impressor.js",
-    module: "Impressor",
+    module: ["Impressor", "Utils", "Types"],
     main: "Impressor"
   });
 });
@@ -35,5 +37,11 @@ gulp.task("bundle", ["prebundle"], function () {
     }))
     .pipe(gulp.dest("dist"));
 });
+
+gulp.task("compress", ["bundle"], function () {
+  return gulp.src("dist/impressor.js")
+    .pipe(uglify())
+    .pipe(gulp.dest("dist"));
+})
 
 gulp.task("default", ["bundle"]);
