@@ -2,13 +2,21 @@ module Impressor where
 
 import Prelude
 
-import DOM
+import DOM (DOM())
 
-import Control.Bind
 import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Console (log, CONSOLE())
 
 import Graphics.Canvas
+  ( Canvas()
+  , CanvasElement()
+  , Context2D()
+  , getContext2D
+  , setCanvasWidth
+  , setCanvasHeight
+  , drawImageFull
+  , canvasToDataURL
+  )
 
 import Utils
 import Types
@@ -23,36 +31,46 @@ Target height: 600px
 Target ratio: 1.67:1
 -}
 
-sizes :: ImageDimensions
-sizes = { w: 1000.0, h: 600.0 }
+targetSizes :: Size2D
+targetSizes = { w: 1000.0, h: 600.0 }
 
-aspectRatio :: ImageDimensions -> Number
+aspectRatio :: Size2D -> Number
 aspectRatio src = src.w / src.h
 
-croppingProps :: ImageDimensions -> ImageDimensions -> CroppingProps
-croppingProps src target = { top: top, left: left, w: width, h: height }
-    where
-    isWiderThanTarget = aspectRatio src > aspectRatio target
-    width = if isWiderThanTarget then target.h / aspectRatio src else target.w
-    height = if isWiderThanTarget then target.h else target.w / aspectRatio src
-    top = if isWiderThanTarget then 0.0 else (target.h / 2.0) - (src.h / 2.0)
-    left = if isWiderThanTarget then (target.w / 2.0) - (src.w / 2.0) else 0.0
+croppingProps :: Size2D -> Size2D -> CroppingProps
+croppingProps src target = { left: left, top: top, w: width, h: height }
+  where
+  isWiderThanTarget = aspectRatio src > aspectRatio target
+  left = if isWiderThanTarget then ( src.w - ( src.h * aspectRatio target )) / 2.0 else 0.0
+  top = if isWiderThanTarget then 0.0 else ( src.h - ( src.w / aspectRatio target )) / 2.0
+  width = if isWiderThanTarget then src.h * aspectRatio target else src.w
+  height = if isWiderThanTarget then 0.0 else src.w / aspectRatio target
 
-processImage :: forall eff. ImageDimensions -> Eff (canvas :: Canvas, dom :: DOM | eff ) String
-processImage size = do
-  canvas <- createCanvasElement
-  ctx <- getContext2D canvas
-  image <- getImageById "image"
-  imageDimensions <- getImageDimensions image
+processImage :: forall eff. CanvasPackage -> Size2D -> Size2D -> Eff (canvas :: Canvas, dom :: DOM | eff ) Context2D
+processImage canvas srcSize targetSize = do
+  setCanvasWidth targetSize.w canvas.el
+  setCanvasHeight targetSize.h canvas.el
 
-  setCanvasWidth size.w canvas
-  setCanvasHeight size.h canvas
-
-  let props = croppingProps imageDimensions size
-  drawImageFull ctx image 0.0 0.0 props.w props.h props.left props.top size.w size.h
-  canvasToDataURL canvas
+  let croppingProps' = croppingProps srcSize targetSize
+  drawImageFull canvas.ctx
+                canvas.img
+                croppingProps'.left
+                croppingProps'.top
+                croppingProps'.w
+                croppingProps'.h
+                0.0
+                0.0
+                targetSize.w
+                targetSize.h
 
 main :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
-main = do
-  dataUrl <- processImage sizes
+main = onWindowLoad do
+  el <- createCanvasElement
+  ctx <- getContext2D el
+  img <- getImageById "image"
+  srcSize <- getImageDimensions img
+
+  processImage {el:el,ctx:ctx,img:img} srcSize targetSizes
+
+  dataUrl <- canvasToDataURL el
   log dataUrl

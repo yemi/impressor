@@ -1,10 +1,15 @@
 module Types
-  ( ImageDimensions()
+  ( Size2D()
   , CroppingProps()
+  , CanvasPackage()
   ) where
 
 import Prelude
 
-type ImageDimensions = { w :: Number, h :: Number }
+import Graphics.Canvas (CanvasElement(), Context2D(), CanvasImageSource())
 
-type CroppingProps = { top :: Number, left :: Number, w :: Number, h :: Number }
+type Size2D = { w :: Number, h :: Number }
+
+type CroppingProps = { left :: Number, top :: Number, w :: Number, h :: Number }
+
+type CanvasPackage = { el :: CanvasElement , ctx :: Context2D , img :: CanvasImageSource }
