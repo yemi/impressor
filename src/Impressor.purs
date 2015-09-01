@@ -4,7 +4,7 @@ import Prelude
 
 import DOM (DOM())
 
-import Data.Foldable (foldl, for_)
+import Data.Foldable (for_)
 import Data.List (List(), toList)
 import Data.Traversable (traverse)
 
