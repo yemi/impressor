@@ -1,9 +1,10 @@
 module Utils
   ( getImageById
   , getImageDimensions
-  , elementToCanvasElement
   , createCanvasElement
   , onWindowLoad
+  , always
+  , aspectRatio
   ) where
 
 import Prelude
@@ -29,8 +30,6 @@ foreign import getImageById :: forall eff. String -> Eff (dom :: DOM | eff) Canv
 
 foreign import getImageDimensions :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
 
-foreign import elementToCanvasElement :: Element -> CanvasElement
-
 createCanvasElement :: forall eff. Eff (dom :: DOM | eff) CanvasElement
 createCanvasElement = do
   doc <- htmlDocumentToDocument <$> (document =<< window)
@@ -41,3 +40,6 @@ onWindowLoad eff = addEventListener load (eventListener $ always eff) false <<< 
 
 always :: forall a b. a -> b -> a
 always a b = a
+
+aspectRatio :: Size2D -> Number
+aspectRatio {w:w,h:h} = w / h

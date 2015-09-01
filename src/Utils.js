@@ -13,7 +13,3 @@ exports.getImageDimensions = function (img) {
         return { w: img.naturalWidth, h: img.naturalHeight };
     }
 };
-
-exports.elementToCanvasElement = function (el) {
-    return el;
-};
