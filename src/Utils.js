@@ -13,7 +13,7 @@ exports.getCanvasImageSourceByIdImpl = function (id, Just, Nothing) {
     };
 };
 
-exports.getImageDimensions = function (img) {
+exports.getImageSize = function (img) {
     return function () {
         return { w: img.naturalWidth, h: img.naturalHeight };
     };

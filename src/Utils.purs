@@ -1,6 +1,6 @@
 module Utils
   ( getCanvasImageSourceById
-  , getImageDimensions
+  , getImageSize
   , canvasToDataURL_
   , createCanvasElement
   , onWindowLoad
@@ -17,7 +17,7 @@ import DOM.HTML.Types (htmlDocumentToDocument, windowToEventTarget)
 import DOM.Node.Document (createElement)
 import DOM.Node.Types (Element())
 import DOM.Event.EventTarget (eventListener, addEventListener)
-import DOM.Event.EventTypes (load)
+import DOM.Event.EventTypes (load, click)
 import DOM.Event.Types (Event())
 
 import Data.Maybe
@@ -35,7 +35,7 @@ foreign import getCanvasImageSourceByIdImpl :: forall r eff. Fn3 String (CanvasI
 getCanvasImageSourceById :: forall eff. String -> Eff (canvas :: Canvas | eff) (Maybe CanvasImageSource)
 getCanvasImageSourceById elId = runFn3 getCanvasImageSourceByIdImpl elId Just Nothing
 
-foreign import getImageDimensions :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
+foreign import getImageSize :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
 
 foreign import canvasToDataURL_ :: forall eff. String -> Number -> CanvasElement -> Eff (canvas :: Canvas | eff) String
 
@@ -46,6 +46,9 @@ createCanvasElement = do
 
 onWindowLoad :: forall m eff. Eff (dom :: DOM | eff) Unit -> Eff (dom :: DOM | eff) Unit
 onWindowLoad eff = addEventListener load (eventListener $ always eff) false <<< windowToEventTarget =<< window
+
+-- onClick :: forall m eff. Eff (dom :: DOM | eff) Unit -> Element -> Eff (dom :: DOM | eff) Unit
+-- onClick eff el = addEventListener click (eventListener $ always eff) false $ elementToEventTarget el
 
 always :: forall a b. a -> b -> a
 always a b = a

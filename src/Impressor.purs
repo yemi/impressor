@@ -60,9 +60,9 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
   createImage targetSize = do
     setCanvasWidth targetSize.w el
     setCanvasHeight targetSize.h el
-    processImage targetSize
+    processImage targetSize -- Draw the processed image to the canvas
     dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality el
-    clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetSize.h }
+    clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetSize.h } -- Clear the canvas
     return dataUrl
 
   processImage :: forall eff. Size2D -> Eff (canvas :: Canvas | eff ) Context2D
@@ -70,22 +70,22 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
     let croppingProps' = croppingProps srcSize targetSize
     drawImageFull ctx
                   img
-                  croppingProps'.left
-                  croppingProps'.top
-                  croppingProps'.w
-                  croppingProps'.h
-                  0.0
-                  0.0
-                  targetSize.w
-                  targetSize.h
+                  croppingProps'.left -- Amount to crop from the left
+                  croppingProps'.top -- Amount to crop from the top
+                  croppingProps'.w -- Width of the cropped, unscaled image
+                  croppingProps'.h -- Height of the cropped, unscaled image
+                  0.0 -- Left padding
+                  0.0 -- Top padding
+                  targetSize.w -- Scale it up to target width
+                  targetSize.h -- Scale it up to target height
 
 main :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
 main = onWindowLoad do
   el <- createCanvasElement
   ctx <- getContext2D el
   Just img <- getCanvasImageSourceById "image"
-  srcSize <- getImageDimensions img
+  srcSize <- getImageSize img
   imgs <- createImages { el:el, ctx:ctx, img:img } srcSize targetSizes
 
   for_ imgs \img' -> do
-    log img'
+    log { img'
