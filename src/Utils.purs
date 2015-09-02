@@ -1,6 +1,7 @@
 module Utils
-  ( getImageById
+  ( getCanvasImageSourceById
   , getImageDimensions
+  , canvasToDataURL_
   , createCanvasElement
   , onWindowLoad
   , always
@@ -19,16 +20,24 @@ import DOM.Event.EventTarget (eventListener, addEventListener)
 import DOM.Event.EventTypes (load)
 import DOM.Event.Types (Event())
 
+import Data.Maybe
+import Data.Function (Fn3(), runFn3)
+
 import Control.Monad.Eff (Eff())
 import Control.Bind ((=<<))
 
-import Graphics.Canvas (CanvasElement(), CanvasImageSource())
+import Graphics.Canvas (Canvas(), CanvasElement(), CanvasImageSource())
 
 import Types
 
-foreign import getImageById :: forall eff. String -> Eff (dom :: DOM | eff) CanvasImageSource
+foreign import getCanvasImageSourceByIdImpl :: forall r eff. Fn3 String (CanvasImageSource -> r) r (Eff (canvas :: Canvas | eff) r)
+
+getCanvasImageSourceById :: forall eff. String -> Eff (canvas :: Canvas | eff) (Maybe CanvasImageSource)
+getCanvasImageSourceById elId = runFn3 getCanvasImageSourceByIdImpl elId Just Nothing
 
 foreign import getImageDimensions :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
+
+foreign import canvasToDataURL_ :: forall eff. String -> Number -> CanvasElement -> Eff (canvas :: Canvas | eff) String
 
 createCanvasElement :: forall eff. Eff (dom :: DOM | eff) CanvasElement
 createCanvasElement = do

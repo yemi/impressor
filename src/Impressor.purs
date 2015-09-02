@@ -7,6 +7,7 @@ import DOM (DOM())
 import Data.Foldable (for_)
 import Data.List (List(), toList)
 import Data.Traversable (traverse)
+import Data.Maybe
 
 import Control.Monad.Eff (Eff(), foreachE)
 import Control.Monad.Eff.Console (log, CONSOLE())
@@ -19,7 +20,6 @@ import Graphics.Canvas
   , setCanvasWidth
   , setCanvasHeight
   , drawImageFull
-  , canvasToDataURL
   , clearRect
   )
 
@@ -36,8 +36,11 @@ Target height: 600px
 Target ratio: 1.67:1
 -}
 
+imageQuality :: Number
+imageQuality = 0.85
+
 targetSizes :: List Size2D
-targetSizes = toList [{ w: 1000.0, h: 600.0 }, { w: 800.0, h: 200.0 }]
+targetSizes = toList [{ w: 1000.0, h: 600.0 }, { w: 800.0, h: 200.0 }, { w: 610.0, h: 405.0 }]
 
 croppingProps :: Size2D -> Size2D -> CroppingProps
 croppingProps src target = { left: left, top: top, w: width, h: height }
@@ -47,7 +50,7 @@ croppingProps src target = { left: left, top: top, w: width, h: height }
   left = if srcHasHigherAspectRatioThanTarget then ( src.w - ( src.h * aspectRatio target )) / 2.0 else 0.0
   top = if srcHasHigherAspectRatioThanTarget then 0.0 else ( src.h - ( src.w / aspectRatio target )) / 2.0
   width = if srcHasHigherAspectRatioThanTarget then src.h * aspectRatio target else src.w
-  height = if srcHasHigherAspectRatioThanTarget then 0.0 else src.w / aspectRatio target
+  height = if srcHasHigherAspectRatioThanTarget then src.h else src.w / aspectRatio target
 
 createImages :: forall eff. CanvasPackage -> Size2D -> List Size2D -> Eff (canvas :: Canvas | eff) (List String)
 createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage targetSizes
@@ -58,7 +61,7 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
     setCanvasWidth targetSize.w el
     setCanvasHeight targetSize.h el
     processImage targetSize
-    dataUrl <- canvasToDataURL el
+    dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality el
     clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetSize.h }
     return dataUrl
 
@@ -80,7 +83,7 @@ main :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff)
 main = onWindowLoad do
   el <- createCanvasElement
   ctx <- getContext2D el
-  img <- getImageById "image"
+  Just img <- getCanvasImageSourceById "image"
   srcSize <- getImageDimensions img
   imgs <- createImages { el:el, ctx:ctx, img:img } srcSize targetSizes
 

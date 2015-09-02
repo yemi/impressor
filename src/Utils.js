@@ -2,14 +2,29 @@
 
 // module Utils
 
-exports.getImageById = function(id) {
+exports.getCanvasImageSourceByIdImpl = function (id, Just, Nothing) {
     return function() {
-        return document.getElementById(id);
-    }
+        var el = document.getElementById(id);
+        if (el && el instanceof HTMLImageElement) {
+            return Just(el);
+        } else {
+            return Nothing;
+        }
+    };
 };
 
 exports.getImageDimensions = function (img) {
     return function () {
         return { w: img.naturalWidth, h: img.naturalHeight };
-    }
+    };
+};
+
+exports.canvasToDataURL_ = function (type) {
+    return function (encoderOptions) {
+        return function (canvas) {
+            return function () {
+                return canvas.toDataURL(type, encoderOptions);
+            };
+        };
+    };
 };
