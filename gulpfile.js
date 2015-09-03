@@ -16,16 +16,15 @@ var foreigns = [
   "src/**/*.js"
 ];
 
-gulp.task("make", function() {
+gulp.task("make", function () {
   return purescript.psc({ src: sources, ffi: foreigns });
 });
 
-gulp.task("prebundle", ["make"], function() {
+gulp.task("prebundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
     output: "dist/impressor.js",
-    module: ["Impressor", "Utils", "Types"],
-    main: "Impressor"
+    module: ["Impressor", "Utils", "Types"]
   });
 });
 

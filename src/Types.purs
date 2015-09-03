@@ -18,3 +18,5 @@ type CroppingProps = { left :: Number, top :: Number, w :: Number, h :: Number }
 type CanvasPackage = { el :: CanvasElement , ctx :: Context2D , img :: CanvasImageSource }
 
 foreign import elementToCanvasElement :: Element -> CanvasElement
+
+newtype Opts = Opts { image :: CanvasImageSource, sizes :: Array String }  

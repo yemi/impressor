@@ -9,7 +9,7 @@ import Data.List (List(), toList)
 import Data.Traversable (traverse)
 import Data.Maybe
 
-import Control.Monad.Eff (Eff(), foreachE)
+import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Console (log, CONSOLE())
 
 import Graphics.Canvas
@@ -79,13 +79,13 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
                   targetSize.w -- Scale it up to target width
                   targetSize.h -- Scale it up to target height
 
-main :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
-main = onWindowLoad do
+impress :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
+impress = do
   el <- createCanvasElement
   ctx <- getContext2D el
-  Just img <- getCanvasImageSourceById "image"
+  Just img <- getCanvasImageSource "#image"
   srcSize <- getImageSize img
   imgs <- createImages { el:el, ctx:ctx, img:img } srcSize targetSizes
 
   for_ imgs \img' -> do
-    log { img'
+    log img'

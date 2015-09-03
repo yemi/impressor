@@ -2,16 +2,38 @@
 
 // module Utils
 
-exports.getCanvasImageSourceByIdImpl = function (id, Just, Nothing) {
-    return function() {
-        var el = document.getElementById(id);
-        if (el && el instanceof HTMLImageElement) {
-            return Just(el);
-        } else {
-            return Nothing;
-        }
-    };
+exports.htmlElementToCanvasImageSourceImpl = function (el, Just, Nothing) {
+    if (el && el instanceof HTMLImageElement) {
+        return Just(el);
+    } else {
+        return Nothing;
+    }
 };
+
+exports.querySelectorImpl = function (selector, Just, Nothing) {
+    return function () {
+        var el = document.querySelector(selector);
+        return el ? Just(el) : Nothing;
+    }
+}
+
+exports.getFileImpl = function (el, Just, Nothing) {
+    return function () {
+        return el.file[0] ? Just(el.file[0]) : Nothing;
+    }
+}
+
+exports.fileName = function (file) {
+    return function () {
+        return file.name;
+    }
+}
+
+exports.fileType = function (file) {
+    return function () {
+        return file.type;
+    }
+}
 
 exports.getImageSize = function (img) {
     return function () {

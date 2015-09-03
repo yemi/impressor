@@ -1,5 +1,7 @@
 module Utils
-  ( getCanvasImageSourceById
+  ( htmlElementToCanvasImageSource
+  , querySelector
+  , getCanvasImageSource
   , getImageSize
   , canvasToDataURL_
   , createCanvasElement
@@ -13,7 +15,7 @@ import Prelude
 import DOM (DOM())
 import DOM.HTML (window)
 import DOM.HTML.Window (document)
-import DOM.HTML.Types (htmlDocumentToDocument, windowToEventTarget)
+import DOM.HTML.Types (HTMLElement(), htmlElementToEventTarget, htmlDocumentToDocument, windowToEventTarget)
 import DOM.Node.Document (createElement)
 import DOM.Node.Types (Element())
 import DOM.Event.EventTarget (eventListener, addEventListener)
@@ -30,10 +32,18 @@ import Graphics.Canvas (Canvas(), CanvasElement(), CanvasImageSource())
 
 import Types
 
-foreign import getCanvasImageSourceByIdImpl :: forall r eff. Fn3 String (CanvasImageSource -> r) r (Eff (canvas :: Canvas | eff) r)
+foreign import htmlElementToCanvasImageSourceImpl :: forall r eff. Fn3 HTMLElement (CanvasImageSource -> r) r r
 
-getCanvasImageSourceById :: forall eff. String -> Eff (canvas :: Canvas | eff) (Maybe CanvasImageSource)
-getCanvasImageSourceById elId = runFn3 getCanvasImageSourceByIdImpl elId Just Nothing
+htmlElementToCanvasImageSource :: forall eff. HTMLElement -> Maybe CanvasImageSource
+htmlElementToCanvasImageSource el = runFn3 htmlElementToCanvasImageSourceImpl el Just Nothing
+
+foreign import querySelectorImpl :: forall r eff. Fn3 String (HTMLElement -> r) r (Eff (dom :: DOM | eff) r)
+
+querySelector :: forall eff. String -> Eff (dom :: DOM | eff) (Maybe HTMLElement)
+querySelector selector = runFn3 querySelectorImpl selector Just Nothing
+
+getCanvasImageSource :: forall eff. String -> Eff (dom :: DOM | eff) (Maybe CanvasImageSource)
+getCanvasImageSource selector = return <<< flip bind htmlElementToCanvasImageSource =<< querySelector selector
 
 foreign import getImageSize :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
 
@@ -46,9 +56,6 @@ createCanvasElement = do
 
 onWindowLoad :: forall m eff. Eff (dom :: DOM | eff) Unit -> Eff (dom :: DOM | eff) Unit
 onWindowLoad eff = addEventListener load (eventListener $ always eff) false <<< windowToEventTarget =<< window
-
--- onClick :: forall m eff. Eff (dom :: DOM | eff) Unit -> Element -> Eff (dom :: DOM | eff) Unit
--- onClick eff el = addEventListener click (eventListener $ always eff) false $ elementToEventTarget el
 
 always :: forall a b. a -> b -> a
 always a b = a
