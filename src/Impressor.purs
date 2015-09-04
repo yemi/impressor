@@ -5,12 +5,16 @@ import Prelude
 import DOM (DOM())
 
 import Data.Foldable (for_)
-import Data.List (List(), toList)
 import Data.Traversable (traverse)
 import Data.Maybe
+import Data.Foreign (Foreign(), ForeignError(), F())
+import Data.Foreign.Class (read)
+import Data.Either (Either(..), either)
+import Data.Monoid 
+import Data.Functor (($>))
 
 import Control.Monad.Eff (Eff())
-import Control.Monad.Eff.Console (log, CONSOLE())
+import Control.Monad.Eff.Exception (EXCEPTION(), error, throwException)
 
 import Graphics.Canvas
   ( Canvas()
@@ -26,23 +30,10 @@ import Graphics.Canvas
 import Utils
 import Types
 
-{-
-Image width: 610px
-Image height: 405px
-Image ratio: 1.51:1
-
-Target width: 1000px
-Target height: 600px
-Target ratio: 1.67:1
--}
-
 imageQuality :: Number
 imageQuality = 0.85
 
-targetSizes :: forall a. List ImageProps
-targetSizes = toList [{ w: 1000.0, h: 600.0, suffix: "_large" }, { w: 800.0, h: 200.0, suffix: "_medium" }, { w: 610.0, h: 405.0, suffix: "small" }]
-
-croppingProps :: forall a. (Size2D a) -> (Size2D a) -> CroppingProps
+croppingProps :: forall a b. (Size2D a) -> (Size2D b) -> CroppingProps
 croppingProps src target = { left: left, top: top, w: width, h: height }
   where
 
@@ -52,12 +43,12 @@ croppingProps src target = { left: left, top: top, w: width, h: height }
   width = if srcHasHigherAspectRatioThanTarget then src.h * aspectRatio target else src.w
   height = if srcHasHigherAspectRatioThanTarget then src.h else src.w / aspectRatio target
 
-createImages :: forall a eff. CanvasPackage -> (Size2D a) -> List (Size2D a) -> Eff (canvas :: Canvas | eff) (List String)
+createImages :: forall a eff. CanvasPackage -> (Size2D a) -> Array ImageProps -> Eff (canvas :: Canvas | eff) (Array String)
 createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage targetSizes
   where
 
-  createImage :: (Size2D a) -> Eff (canvas :: Canvas | eff) String
-  createImage targetSize = do
+  createImage :: ImageProps -> Eff (canvas :: Canvas | eff) String
+  createImage (ImageProps targetSize) = do
     setCanvasWidth targetSize.w el
     setCanvasHeight targetSize.h el
     processImage targetSize -- Draw the processed image to the canvas
@@ -65,7 +56,7 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
     clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetSize.h } -- Clear the canvas
     return dataUrl
 
-  processImage :: (Size2D a) -> Eff (canvas :: Canvas | eff ) Context2D
+  processImage :: forall b. (Size2D b) -> Eff (canvas :: Canvas | eff ) Context2D
   processImage targetSize = do
     let croppingProps' = croppingProps srcSize targetSize
     drawImageFull ctx
@@ -76,16 +67,23 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
                   croppingProps'.h -- Height of the cropped, unscaled image
                   0.0 -- Left padding
                   0.0 -- Top padding
-                  targetSize.w -- Scale it up to target width
-                  targetSize.h -- Scale it up to target height
+                  targetSize.w -- Scale it up/down to target width
+                  targetSize.h -- Scale it up/down to target height
 
-impress :: forall eff. Eff (dom :: DOM, canvas :: Canvas, console :: CONSOLE | eff) Unit
-impress = do
-  el <- createCanvasElement
-  ctx <- getContext2D el
-  Just img <- getCanvasImageSource "#image"
-  srcSize <- getImageSize img
-  imgs <- createImages { el:el, ctx:ctx, img:img } srcSize targetSizes
+impress :: forall eff. Foreign -> Eff (dom :: DOM, canvas :: Canvas, err :: EXCEPTION | eff) (Array String)
+impress opts = either invalidProps createImages' parsedOpts
+  where
 
-  for_ imgs \img' -> do
-    log img'
+  parsedOpts :: F Opts
+  parsedOpts = read opts
+
+  invalidProps :: forall m eff. (Monoid m) => ForeignError -> Eff (err :: EXCEPTION | eff) m
+  invalidProps err = (throwException <<< error <<< show $ err) $> mempty
+
+  createImages' :: forall eff. Opts -> Eff (dom :: DOM, canvas :: Canvas | eff) (Array String)
+  createImages' (Opts {sizes:targetSizes}) = do
+    el <- createCanvasElement
+    ctx <- getContext2D el
+    Just img <- getCanvasImageSource "#image"
+    srcSize <- getImageSize img
+    createImages { el:el, ctx:ctx, img:img } srcSize targetSizes

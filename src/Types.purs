@@ -2,7 +2,8 @@ module Types
   ( Size2D()
   , CroppingProps()
   , CanvasPackage()
-  , ImageProps()
+  , ImageProps(ImageProps)
+  , Opts(Opts)
   , elementToCanvasElement
   ) where
 
@@ -17,12 +18,10 @@ type Size2D a =
   , h :: Number
   | a }
 
-type CroppingProps =
-  { left :: Number
+type CroppingProps = Size2D
+  ( left :: Number
   , top :: Number
-  , w :: Number
-  , h :: Number
-  }
+  )
 
 type CanvasPackage =
   { el :: CanvasElement
@@ -30,19 +29,12 @@ type CanvasPackage =
   , img :: CanvasImageSource
   }
 
-type ImageProps =
-  { w :: Number
-  , h :: Number
-  , suffix :: String
-  }
-
 newtype Opts = Opts
-  { image :: CanvasImageSource
+  { image :: String
   , sizes :: Array ImageProps
   }
 
-instance isForeignCanvasImageSource :: IsForeign CanvasImageSource where
-  read img = img
+newtype ImageProps = ImageProps (Size2D ( suffix :: String ))
 
 instance isForeignOpts :: IsForeign Opts where
   read obj =
@@ -50,5 +42,14 @@ instance isForeignOpts :: IsForeign Opts where
               , sizes: _
               } <$> readProp "image" obj
                 <*> readProp "sizes" obj)
+
+instance isForeignImageProps :: IsForeign ImageProps where
+  read obj =
+    ImageProps <$> ({ w: _
+                    , h: _
+                    , suffix: _
+                    } <$> readProp "width" obj
+                      <*> readProp "height" obj
+                      <*> readProp "suffix" obj)
 
 foreign import elementToCanvasElement :: Element -> CanvasElement
