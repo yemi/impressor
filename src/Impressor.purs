@@ -39,10 +39,10 @@ Target ratio: 1.67:1
 imageQuality :: Number
 imageQuality = 0.85
 
-targetSizes :: List Size2D
-targetSizes = toList [{ w: 1000.0, h: 600.0 }, { w: 800.0, h: 200.0 }, { w: 610.0, h: 405.0 }]
+targetSizes :: forall a. List ImageProps
+targetSizes = toList [{ w: 1000.0, h: 600.0, suffix: "_large" }, { w: 800.0, h: 200.0, suffix: "_medium" }, { w: 610.0, h: 405.0, suffix: "small" }]
 
-croppingProps :: Size2D -> Size2D -> CroppingProps
+croppingProps :: forall a. (Size2D a) -> (Size2D a) -> CroppingProps
 croppingProps src target = { left: left, top: top, w: width, h: height }
   where
 
@@ -52,11 +52,11 @@ croppingProps src target = { left: left, top: top, w: width, h: height }
   width = if srcHasHigherAspectRatioThanTarget then src.h * aspectRatio target else src.w
   height = if srcHasHigherAspectRatioThanTarget then src.h else src.w / aspectRatio target
 
-createImages :: forall eff. CanvasPackage -> Size2D -> List Size2D -> Eff (canvas :: Canvas | eff) (List String)
+createImages :: forall a eff. CanvasPackage -> (Size2D a) -> List (Size2D a) -> Eff (canvas :: Canvas | eff) (List String)
 createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage targetSizes
   where
 
-  createImage :: forall eff. Size2D -> Eff (canvas :: Canvas | eff) String
+  createImage :: (Size2D a) -> Eff (canvas :: Canvas | eff) String
   createImage targetSize = do
     setCanvasWidth targetSize.w el
     setCanvasHeight targetSize.h el
@@ -65,7 +65,7 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
     clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetSize.h } -- Clear the canvas
     return dataUrl
 
-  processImage :: forall eff. Size2D -> Eff (canvas :: Canvas | eff ) Context2D
+  processImage :: (Size2D a) -> Eff (canvas :: Canvas | eff ) Context2D
   processImage targetSize = do
     let croppingProps' = croppingProps srcSize targetSize
     drawImageFull ctx

@@ -45,7 +45,7 @@ querySelector selector = runFn3 querySelectorImpl selector Just Nothing
 getCanvasImageSource :: forall eff. String -> Eff (dom :: DOM | eff) (Maybe CanvasImageSource)
 getCanvasImageSource selector = return <<< flip bind htmlElementToCanvasImageSource =<< querySelector selector
 
-foreign import getImageSize :: forall eff. CanvasImageSource -> Eff (dom :: DOM | eff) Size2D
+foreign import getImageSize :: forall eff a. CanvasImageSource -> Eff (dom :: DOM | eff) (Size2D a)
 
 foreign import canvasToDataURL_ :: forall eff. String -> Number -> CanvasElement -> Eff (canvas :: Canvas | eff) String
 
@@ -60,5 +60,5 @@ onWindowLoad eff = addEventListener load (eventListener $ always eff) false <<< 
 always :: forall a b. a -> b -> a
 always a b = a
 
-aspectRatio :: Size2D -> Number
+aspectRatio :: forall a. Size2D a -> Number
 aspectRatio {w:w,h:h} = w / h
