@@ -10,7 +10,7 @@ import Data.Maybe
 import Data.Foreign (Foreign(), ForeignError(), F())
 import Data.Foreign.Class (read)
 import Data.Either (Either(..), either)
-import Data.Monoid 
+import Data.Monoid
 import Data.Functor (($>))
 
 import Control.Monad.Eff (Eff())
@@ -71,14 +71,14 @@ createImages {el:el,ctx:ctx,img:img} srcSize targetSizes = traverse createImage 
                   targetSize.h -- Scale it up/down to target height
 
 impress :: forall eff. Foreign -> Eff (dom :: DOM, canvas :: Canvas, err :: EXCEPTION | eff) (Array String)
-impress opts = either invalidProps createImages' parsedOpts
+impress opts = either parsingErrorHandler createImages' parsedOpts
   where
 
   parsedOpts :: F Opts
   parsedOpts = read opts
 
-  invalidProps :: forall m eff. (Monoid m) => ForeignError -> Eff (err :: EXCEPTION | eff) m
-  invalidProps err = (throwException <<< error <<< show $ err) $> mempty
+  parsingErrorHandler :: forall m eff. (Monoid m) => ForeignError -> Eff (err :: EXCEPTION | eff) m
+  parsingErrorHandler err = (throwException <<< error <<< show $ err) $> mempty
 
   createImages' :: forall eff. Opts -> Eff (dom :: DOM, canvas :: Canvas | eff) (Array String)
   createImages' (Opts {sizes:targetSizes}) = do

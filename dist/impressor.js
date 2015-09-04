@@ -1348,11 +1348,11 @@ var PS = { };
                   return {
                       w: _2, 
                       h: _3, 
-                      suffix: _4
+                      name: _4
                   };
               };
           };
-      })(Data_Foreign_Class.readProp(Data_Foreign_Class.numberIsForeign)(Data_Foreign_Index.indexString)("width")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.numberIsForeign)(Data_Foreign_Index.indexString)("height")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("suffix")(obj)));
+      })(Data_Foreign_Class.readProp(Data_Foreign_Class.numberIsForeign)(Data_Foreign_Index.indexString)("width")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.numberIsForeign)(Data_Foreign_Index.indexString)("height")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("name")(obj)));
   });
   var isForeignOpts = new Data_Foreign_Class.IsForeign(function (obj) {
       return Prelude["<$>"](Data_Either.functorEither)(Opts)(Prelude["<*>"](Data_Either.applyEither)(Prelude["<$>"](Data_Either.functorEither)(function (_0) {
@@ -1398,16 +1398,16 @@ var PS = { };
       return $foreign.htmlElementToCanvasImageSourceImpl(el, Data_Maybe.Just.create, Data_Maybe.Nothing.value);
   };
   var getCanvasImageSource = function (selector) {
-      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_18) {
-          return Prelude["return"](Control_Monad_Eff.applicativeEff)(Prelude.flip(Prelude.bind(Data_Maybe.bindMaybe))(htmlElementToCanvasImageSource)(_18));
+      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_14) {
+          return Prelude["return"](Control_Monad_Eff.applicativeEff)(Prelude.flip(Prelude.bind(Data_Maybe.bindMaybe))(htmlElementToCanvasImageSource)(_14));
       })(querySelector(selector));
   };
   var createCanvasElement = function __do() {
-      var _5 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
-      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_5))();
+      var _0 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
+      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_0))();
   };
-  var aspectRatio = function (_11) {
-      return _11.w / _11.h;
+  var aspectRatio = function (_6) {
+      return _6.w / _6.h;
   };
   var always = function (a) {
       return function (b) {
@@ -1415,8 +1415,8 @@ var PS = { };
       };
   };
   var onWindowLoad = function (eff) {
-      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_19) {
-          return DOM_Event_EventTarget.addEventListener(DOM_Event_EventTypes.load)(DOM_Event_EventTarget.eventListener(always(eff)))(false)(DOM_HTML_Types.windowToEventTarget(_19));
+      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_15) {
+          return DOM_Event_EventTarget.addEventListener(DOM_Event_EventTypes.load)(DOM_Event_EventTarget.eventListener(always(eff)))(false)(DOM_HTML_Types.windowToEventTarget(_15));
       })(DOM_HTML.window);
   };
   exports["aspectRatio"] = aspectRatio;
@@ -1523,12 +1523,12 @@ var PS = { };
       };
   };
   var impress = function (opts) {
-      var parsedOpts = Data_Foreign_Class.read(Types.isForeignOpts)(opts);
-      var invalidProps = function (__dict_Monoid_0) {
+      var parsingErrorHandler = function (__dict_Monoid_0) {
           return function (err) {
               return Data_Functor["$>"](Control_Monad_Eff.functorEff)(Control_Monad_Eff_Exception.throwException(Control_Monad_Eff_Exception.error(Prelude.show(Data_Foreign.showForeignError)(err))))(Data_Monoid.mempty(__dict_Monoid_0));
           };
       };
+      var parsedOpts = Data_Foreign_Class.read(Types.isForeignOpts)(opts);
       var createImages$prime = function (_7) {
           return function __do() {
               var _4 = Utils.createCanvasElement();
@@ -1545,7 +1545,7 @@ var PS = { };
               throw new Error("Failed pattern match at Impressor line 73, column 1 - line 74, column 1: " + [ _2.constructor.name ]);
           };
       };
-      return Data_Either.either(invalidProps(Data_Monoid.monoidArray))(createImages$prime)(parsedOpts);
+      return Data_Either.either(parsingErrorHandler(Data_Monoid.monoidArray))(createImages$prime)(parsedOpts);
   };
   exports["impress"] = impress;
   exports["createImages"] = createImages;

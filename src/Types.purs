@@ -34,7 +34,7 @@ newtype Opts = Opts
   , sizes :: Array ImageProps
   }
 
-newtype ImageProps = ImageProps (Size2D ( suffix :: String ))
+newtype ImageProps = ImageProps (Size2D ( name :: String ))
 
 instance isForeignOpts :: IsForeign Opts where
   read obj =
@@ -47,9 +47,9 @@ instance isForeignImageProps :: IsForeign ImageProps where
   read obj =
     ImageProps <$> ({ w: _
                     , h: _
-                    , suffix: _
+                    , name: _
                     } <$> readProp "width" obj
                       <*> readProp "height" obj
-                      <*> readProp "suffix" obj)
+                      <*> readProp "name" obj)
 
 foreign import elementToCanvasElement :: Element -> CanvasElement

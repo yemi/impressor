@@ -17,24 +17,6 @@ exports.querySelectorImpl = function (selector, Just, Nothing) {
     }
 }
 
-exports.getFileImpl = function (el, Just, Nothing) {
-    return function () {
-        return el.file[0] ? Just(el.file[0]) : Nothing;
-    }
-}
-
-exports.fileName = function (file) {
-    return function () {
-        return file.name;
-    }
-}
-
-exports.fileType = function (file) {
-    return function () {
-        return file.type;
-    }
-}
-
 exports.getImageSize = function (img) {
     return function () {
         return { w: img.naturalWidth, h: img.naturalHeight };
