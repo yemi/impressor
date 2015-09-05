@@ -43,4 +43,4 @@ gulp.task("compress", ["bundle"], function () {
     .pipe(gulp.dest("dist"));
 })
 
-gulp.task("default", ["bundle"]);
+gulp.task("default", ["prebundle"]);
