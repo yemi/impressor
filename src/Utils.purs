@@ -4,6 +4,7 @@ module Utils
   , getCanvasImageSource
   , getImageSize
   , canvasToDataURL_
+  , unsafeDataUrlToBlob
   , createCanvasElement
   , onWindowLoad
   , always
@@ -21,6 +22,7 @@ import DOM.Node.Types (Element())
 import DOM.Event.EventTarget (eventListener, addEventListener)
 import DOM.Event.EventTypes (load, click)
 import DOM.Event.Types (Event())
+import DOM.File.Types (Blob())
 
 import Data.Maybe
 import Data.Function (Fn3(), runFn3)
@@ -48,6 +50,8 @@ getCanvasImageSource selector = return <<< flip bind htmlElementToCanvasImageSou
 foreign import getImageSize :: forall eff a. CanvasImageSource -> Eff (dom :: DOM | eff) (Size2D a)
 
 foreign import canvasToDataURL_ :: forall eff. String -> Number -> CanvasElement -> Eff (canvas :: Canvas | eff) String
+
+foreign import unsafeDataUrlToBlob :: String -> Blob
 
 createCanvasElement :: forall eff. Eff (dom :: DOM | eff) CanvasElement
 createCanvasElement = do

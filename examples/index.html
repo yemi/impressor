@@ -25,6 +25,23 @@
       var button = document.getElementById("submit");
       var fileChooser = document.getElementById("file");
 
+      var sizes = [
+        {
+          width: 400,
+          height: 300,
+          name: "small"
+        },
+        {
+          width: 800,
+          height: 100,
+          name: "banner"
+        },
+        {
+          width: 1000,
+          height: 900,
+          name: "large"
+        }
+      ]
 
       button.addEventListener("click", function () {
         var file = fileChooser.files[0];
@@ -35,24 +52,26 @@
           var img = new Image;
 
           img.onload = function (){
-            var opts = {
-              image: img,
-              sizes: [
-                {
-                  width: 400,
-                  height: 300,
-                  name: "small"
-                },
-                {
-                  width: 800,
-                  height: 100,
-                  name: "banner"
-                }
-              ]
-            }
-            var images = PS.Impressor.impress(opts)();
-            images.forEach(function(image) {
-              console.log(image)
+            var blobs = PS.Impressor.impress(img)(sizes)();
+            blobs.forEach(function(blob) {
+              console.log(blob)
+              // var blobReader = new FileReader();
+              //
+              // blobReader.onload = function (e) {
+              //   blobStr = e.target.result;
+              //   blobImg = new Image;
+              //
+              //   console.log(blobStr)
+              //
+              //   blobImg.onload = function () {
+              //     // image loaded
+              //   }
+              //   blobImg.src = blobStr;
+              //
+              // }
+              //
+              // blobReader.readAsDataURL(blob);
+
             })
           }
           img.src = str;

@@ -3,12 +3,13 @@ module Types
   , CroppingProps()
   , CanvasPackage()
   , ImageProps(ImageProps)
-  , Opts(Opts)
+  , ProcessedImage()
   , elementToCanvasElement
   ) where
 
 import Prelude
 import DOM.Node.Types (Element())
+import DOM.File.Types (Blob())
 import Graphics.Canvas (CanvasElement(), Context2D(), CanvasImageSource())
 import Data.Foreign (Foreign())
 import Data.Foreign.Class (IsForeign, read, readProp)
@@ -29,19 +30,12 @@ type CanvasPackage =
   , img :: CanvasImageSource
   }
 
-newtype Opts = Opts
-  { image :: Foreign
-  , sizes :: Array ImageProps
+type ProcessedImage =
+  { name :: String
+  , blob :: Blob
   }
 
 newtype ImageProps = ImageProps (Size2D ( name :: String ))
-
-instance isForeignOpts :: IsForeign Opts where
-  read obj =
-    Opts <$> ({ image: _
-              , sizes: _
-              } <$> readProp "image" obj
-                <*> readProp "sizes" obj)
 
 instance isForeignImageProps :: IsForeign ImageProps where
   read obj =
