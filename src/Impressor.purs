@@ -7,7 +7,7 @@ import DOM (DOM())
 import Data.Foldable (for_)
 import Data.Traversable (traverse)
 import Data.Maybe
-import Data.Foreign (Foreign(), ForeignError(), F())
+import Data.Foreign (Foreign(), ForeignError(), F(), unsafeFromForeign)
 import Data.Foreign.Class (read)
 import Data.Either (Either(..), either)
 import Data.Monoid
@@ -20,6 +20,7 @@ import Graphics.Canvas
   ( Canvas()
   , CanvasElement()
   , Context2D()
+  , CanvasImageSource()
   , getContext2D
   , setCanvasWidth
   , setCanvasHeight
@@ -81,9 +82,10 @@ impress opts = either parsingErrorHandler createImages' parsedOpts
   parsingErrorHandler err = (throwException <<< error <<< show $ err) $> mempty
 
   createImages' :: forall eff. Opts -> Eff (dom :: DOM, canvas :: Canvas | eff) (Array String)
-  createImages' (Opts {sizes:targetSizes}) = do
+  createImages' (Opts { sizes:targetSizes, image:image }) = do
+    let img = unsafeFromForeign image :: CanvasImageSource
     el <- createCanvasElement
     ctx <- getContext2D el
-    Just img <- getCanvasImageSource "#image"
+    -- Just img <- getCanvasImageSource "#image"
     srcSize <- getImageSize img
     createImages { el:el, ctx:ctx, img:img } srcSize targetSizes

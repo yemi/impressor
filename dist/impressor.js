@@ -127,7 +127,7 @@ var PS = { };
       return eq(__dict_Eq_7);
   };
   var $$const = function (a) {
-      return function (_82) {
+      return function (_81) {
           return a;
       };
   };
@@ -438,37 +438,37 @@ var PS = { };
       return Just;
   })();                                             
   var functorMaybe = new Prelude.Functor(function (fn) {
-      return function (_251) {
-          if (_251 instanceof Just) {
-              return new Just(fn(_251.value0));
+      return function (_250) {
+          if (_250 instanceof Just) {
+              return new Just(fn(_250.value0));
           };
           return Nothing.value;
       };
   });
   var applyMaybe = new Prelude.Apply(function () {
       return functorMaybe;
-  }, function (_252) {
+  }, function (_251) {
       return function (x) {
-          if (_252 instanceof Just) {
-              return Prelude["<$>"](functorMaybe)(_252.value0)(x);
+          if (_251 instanceof Just) {
+              return Prelude["<$>"](functorMaybe)(_251.value0)(x);
           };
-          if (_252 instanceof Nothing) {
+          if (_251 instanceof Nothing) {
               return Nothing.value;
           };
-          throw new Error("Failed pattern match at Data.Maybe line 121, column 1 - line 145, column 1: " + [ _252.constructor.name, x.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Maybe line 121, column 1 - line 145, column 1: " + [ _251.constructor.name, x.constructor.name ]);
       };
   });
   var bindMaybe = new Prelude.Bind(function () {
       return applyMaybe;
-  }, function (_254) {
+  }, function (_253) {
       return function (k) {
-          if (_254 instanceof Just) {
-              return k(_254.value0);
+          if (_253 instanceof Just) {
+              return k(_253.value0);
           };
-          if (_254 instanceof Nothing) {
+          if (_253 instanceof Nothing) {
               return Nothing.value;
           };
-          throw new Error("Failed pattern match at Data.Maybe line 180, column 1 - line 199, column 1: " + [ _254.constructor.name, k.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Maybe line 180, column 1 - line 199, column 1: " + [ _253.constructor.name, k.constructor.name ]);
       };
   });
   exports["Nothing"] = Nothing;
@@ -666,46 +666,46 @@ var PS = { };
       return Right;
   })();
   var functorEither = new Prelude.Functor(function (f) {
-      return function (_334) {
-          if (_334 instanceof Left) {
-              return new Left(_334.value0);
+      return function (_333) {
+          if (_333 instanceof Left) {
+              return new Left(_333.value0);
           };
-          if (_334 instanceof Right) {
-              return new Right(f(_334.value0));
+          if (_333 instanceof Right) {
+              return new Right(f(_333.value0));
           };
-          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _334.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _333.constructor.name ]);
       };
   });
   var either = function (f) {
       return function (g) {
-          return function (_333) {
-              if (_333 instanceof Left) {
-                  return f(_333.value0);
+          return function (_332) {
+              if (_332 instanceof Left) {
+                  return f(_332.value0);
               };
-              if (_333 instanceof Right) {
-                  return g(_333.value0);
+              if (_332 instanceof Right) {
+                  return g(_332.value0);
               };
-              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _333.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _332.constructor.name ]);
           };
       };
   }; 
   var applyEither = new Prelude.Apply(function () {
       return functorEither;
-  }, function (_336) {
+  }, function (_335) {
       return function (r) {
-          if (_336 instanceof Left) {
-              return new Left(_336.value0);
+          if (_335 instanceof Left) {
+              return new Left(_335.value0);
           };
-          if (_336 instanceof Right) {
-              return Prelude["<$>"](functorEither)(_336.value0)(r);
+          if (_335 instanceof Right) {
+              return Prelude["<$>"](functorEither)(_335.value0)(r);
           };
-          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _336.constructor.name, r.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _335.constructor.name, r.constructor.name ]);
       };
   });
   var bindEither = new Prelude.Bind(function () {
       return applyEither;
   }, either(function (e) {
-      return function (_332) {
+      return function (_331) {
           return new Left(e);
       };
   })(function (a) {
@@ -817,20 +817,20 @@ var PS = { };
           return new Data_Either.Left(new TypeMismatch(tag, $foreign.tagOf(value)));
       };
   };
-  var showForeignError = new Prelude.Show(function (_358) {
-      if (_358 instanceof TypeMismatch) {
-          return "Type mismatch: expected " + (_358.value0 + (", found " + _358.value1));
+  var showForeignError = new Prelude.Show(function (_357) {
+      if (_357 instanceof TypeMismatch) {
+          return "Type mismatch: expected " + (_357.value0 + (", found " + _357.value1));
       };
-      if (_358 instanceof ErrorAtIndex) {
-          return "Error at array index " + (Prelude.show(Prelude.showInt)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
+      if (_357 instanceof ErrorAtIndex) {
+          return "Error at array index " + (Prelude.show(Prelude.showInt)(_357.value0) + (": " + Prelude.show(showForeignError)(_357.value1)));
       };
-      if (_358 instanceof ErrorAtProperty) {
-          return "Error at property " + (Prelude.show(Prelude.showString)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
+      if (_357 instanceof ErrorAtProperty) {
+          return "Error at property " + (Prelude.show(Prelude.showString)(_357.value0) + (": " + Prelude.show(showForeignError)(_357.value1)));
       };
-      if (_358 instanceof JSONError) {
-          return "JSON error: " + _358.value0;
+      if (_357 instanceof JSONError) {
+          return "JSON error: " + _357.value0;
       };
-      throw new Error("Failed pattern match: " + [ _358.constructor.name ]);
+      throw new Error("Failed pattern match: " + [ _357.constructor.name ]);
   });
   var readString = unsafeReadTagged("String");
   var readNumber = unsafeReadTagged("Number");  
@@ -851,7 +851,8 @@ var PS = { };
   exports["showForeignError"] = showForeignError;
   exports["isUndefined"] = $foreign.isUndefined;
   exports["isNull"] = $foreign.isNull;
-  exports["typeOf"] = $foreign.typeOf;;
+  exports["typeOf"] = $foreign.typeOf;
+  exports["unsafeFromForeign"] = $foreign.unsafeFromForeign;;
  
 })(PS["Data.Foreign"] = PS["Data.Foreign"] || {});
 (function(exports) {
@@ -1043,8 +1044,8 @@ var PS = { };
   var readWith = function (__dict_IsForeign_1) {
       return function (f) {
           return function (value) {
-              return Data_Either.either(function (_1879) {
-                  return Data_Either.Left.create(f(_1879));
+              return Data_Either.either(function (_1876) {
+                  return Data_Either.Left.create(f(_1876));
               })(Data_Either.Right.create)(read(__dict_IsForeign_1)(value));
           };
       };
@@ -1058,7 +1059,10 @@ var PS = { };
           };
       };
   };
-  var numberIsForeign = new IsForeign(Data_Foreign.readNumber);  
+  var numberIsForeign = new IsForeign(Data_Foreign.readNumber);
+  var foreignIsForeign = new IsForeign(function (f) {
+      return Prelude["return"](Data_Either.applicativeEither)(f);
+  });                                                            
   var arrayIsForeign = function (__dict_IsForeign_7) {
       return new IsForeign(function (value) {
           var readElement = function (i) {
@@ -1076,6 +1080,7 @@ var PS = { };
   exports["readProp"] = readProp;
   exports["readWith"] = readWith;
   exports["read"] = read;
+  exports["foreignIsForeign"] = foreignIsForeign;
   exports["stringIsForeign"] = stringIsForeign;
   exports["numberIsForeign"] = numberIsForeign;
   exports["arrayIsForeign"] = arrayIsForeign;;
@@ -1267,9 +1272,9 @@ var PS = { };
   var Prelude = PS["Prelude"];
   var Data_Function = PS["Data.Function"];
   var Data_Maybe = PS["Data.Maybe"];
+  var Control_Monad_Eff = PS["Control.Monad.Eff"];
   var Data_Foreign = PS["Data.Foreign"];
   var Data_Foreign_Class = PS["Data.Foreign.Class"];
-  var Control_Monad_Eff = PS["Control.Monad.Eff"];
   exports["drawImageFull"] = $foreign.drawImageFull;
   exports["clearRect"] = $foreign.clearRect;
   exports["setCanvasHeight"] = $foreign.setCanvasHeight;
@@ -1362,7 +1367,7 @@ var PS = { };
                   sizes: _1
               };
           };
-      })(Data_Foreign_Class.readProp(Data_Foreign_Class.stringIsForeign)(Data_Foreign_Index.indexString)("image")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.arrayIsForeign(isForeignImageProps))(Data_Foreign_Index.indexString)("sizes")(obj)));
+      })(Data_Foreign_Class.readProp(Data_Foreign_Class.foreignIsForeign)(Data_Foreign_Index.indexString)("image")(obj)))(Data_Foreign_Class.readProp(Data_Foreign_Class.arrayIsForeign(isForeignImageProps))(Data_Foreign_Index.indexString)("sizes")(obj)));
   });
   exports["Opts"] = Opts;
   exports["ImageProps"] = ImageProps;
@@ -1398,16 +1403,16 @@ var PS = { };
       return $foreign.htmlElementToCanvasImageSourceImpl(el, Data_Maybe.Just.create, Data_Maybe.Nothing.value);
   };
   var getCanvasImageSource = function (selector) {
-      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_14) {
-          return Prelude["return"](Control_Monad_Eff.applicativeEff)(Prelude.flip(Prelude.bind(Data_Maybe.bindMaybe))(htmlElementToCanvasImageSource)(_14));
+      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_19) {
+          return Prelude["return"](Control_Monad_Eff.applicativeEff)(Prelude.flip(Prelude.bind(Data_Maybe.bindMaybe))(htmlElementToCanvasImageSource)(_19));
       })(querySelector(selector));
   };
   var createCanvasElement = function __do() {
-      var _0 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
-      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_0))();
+      var _5 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
+      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_5))();
   };
-  var aspectRatio = function (_6) {
-      return _6.w / _6.h;
+  var aspectRatio = function (_11) {
+      return _11.w / _11.h;
   };
   var always = function (a) {
       return function (b) {
@@ -1415,8 +1420,8 @@ var PS = { };
       };
   };
   var onWindowLoad = function (eff) {
-      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_15) {
-          return DOM_Event_EventTarget.addEventListener(DOM_Event_EventTypes.load)(DOM_Event_EventTarget.eventListener(always(eff)))(false)(DOM_HTML_Types.windowToEventTarget(_15));
+      return Control_Bind["=<<"](Control_Monad_Eff.bindEff)(function (_20) {
+          return DOM_Event_EventTarget.addEventListener(DOM_Event_EventTypes.load)(DOM_Event_EventTarget.eventListener(always(eff)))(false)(DOM_HTML_Types.windowToEventTarget(_20));
       })(DOM_HTML.window);
   };
   exports["aspectRatio"] = aspectRatio;
@@ -1459,7 +1464,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return (src.h - src.w / Utils.aspectRatio(target)) / 2.0;
               };
-              throw new Error("Failed pattern match at Impressor line 36, column 1 - line 37, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 37, column 1 - line 38, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var width = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1468,7 +1473,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return src.w;
               };
-              throw new Error("Failed pattern match at Impressor line 36, column 1 - line 37, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 37, column 1 - line 38, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var left = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1477,7 +1482,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return 0.0;
               };
-              throw new Error("Failed pattern match at Impressor line 36, column 1 - line 37, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 37, column 1 - line 38, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var height = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1486,7 +1491,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return src.w / Utils.aspectRatio(target);
               };
-              throw new Error("Failed pattern match at Impressor line 36, column 1 - line 37, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 37, column 1 - line 38, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           return {
               left: left, 
@@ -1496,24 +1501,24 @@ var PS = { };
           };
       };
   };
-  var createImages = function (_5) {
+  var createImages = function (_4) {
       return function (srcSize) {
           return function (targetSizes) {
               var processImage = function (targetSize) {
                   var croppingProps$prime = croppingProps(srcSize)(targetSize);
-                  return Graphics_Canvas.drawImageFull(_5.ctx)(_5.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(targetSize.w)(targetSize.h);
+                  return Graphics_Canvas.drawImageFull(_4.ctx)(_4.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(targetSize.w)(targetSize.h);
               };
-              var createImage = function (_6) {
+              var createImage = function (_5) {
                   return function __do() {
-                      Graphics_Canvas.setCanvasWidth(_6.w)(_5.el)();
-                      Graphics_Canvas.setCanvasHeight(_6.h)(_5.el)();
-                      processImage(_6)();
-                      var _0 = Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_5.el)();
-                      Graphics_Canvas.clearRect(_5.ctx)({
+                      Graphics_Canvas.setCanvasWidth(_5.w)(_4.el)();
+                      Graphics_Canvas.setCanvasHeight(_5.h)(_4.el)();
+                      processImage(_5)();
+                      var _0 = Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_4.el)();
+                      Graphics_Canvas.clearRect(_4.ctx)({
                           x: 0.0, 
                           y: 0.0, 
-                          w: _6.w, 
-                          h: _6.h
+                          w: _5.w, 
+                          h: _5.h
                       })();
                       return Prelude["return"](Control_Monad_Eff.applicativeEff)(_0)();
                   };
@@ -1529,20 +1534,17 @@ var PS = { };
           };
       };
       var parsedOpts = Data_Foreign_Class.read(Types.isForeignOpts)(opts);
-      var createImages$prime = function (_7) {
+      var createImages$prime = function (_6) {
+          var img = Data_Foreign.unsafeFromForeign(_6.image);
           return function __do() {
-              var _4 = Utils.createCanvasElement();
-              var _3 = Graphics_Canvas.getContext2D(_4)();
-              var _2 = Utils.getCanvasImageSource("#image")();
-              if (_2 instanceof Data_Maybe.Just) {
-                  var _1 = Utils.getImageSize(_2.value0)();
-                  return createImages({
-                      el: _4, 
-                      ctx: _3, 
-                      img: _2.value0
-                  })(_1)(_7.sizes)();
-              };
-              throw new Error("Failed pattern match at Impressor line 73, column 1 - line 74, column 1: " + [ _2.constructor.name ]);
+              var _3 = Utils.createCanvasElement();
+              var _2 = Graphics_Canvas.getContext2D(_3)();
+              var _1 = Utils.getImageSize(img)();
+              return createImages({
+                  el: _3, 
+                  ctx: _2, 
+                  img: img
+              })(_1)(_6.sizes)();
           };
       };
       return Data_Either.either(parsingErrorHandler(Data_Monoid.monoidArray))(createImages$prime)(parsedOpts);

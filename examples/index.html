@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://www.w3.org/2000/svg">
+  <head>
+    <title>Impressor</title>
+    <style>
+      body {
+        max-width: 800px;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="file" id="file" />
+    </div>
+
+    <div>
+      <button id="submit">Create imagezzz!!!</button>
+    </div>
+
+    <script src="../dist/impressor.js"></script>
+
+    <script>
+
+      var button = document.getElementById("submit");
+      var fileChooser = document.getElementById("file");
+
+
+      button.addEventListener("click", function () {
+        var file = fileChooser.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e){
+          var str = e.target.result;
+          var img = new Image;
+
+          img.onload = function (){
+            var opts = {
+              image: img,
+              sizes: [
+                {
+                  width: 400,
+                  height: 300,
+                  name: "small"
+                },
+                {
+                  width: 800,
+                  height: 100,
+                  name: "banner"
+                }
+              ]
+            }
+            var images = PS.Impressor.impress(opts)();
+            images.forEach(function(image) {
+              console.log(image)
+            })
+          }
+          img.src = str;
+        }
+        reader.readAsDataURL(file);
+      }, false)
+
+    </script>
+  </body>
+</html>

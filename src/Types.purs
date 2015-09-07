@@ -30,7 +30,7 @@ type CanvasPackage =
   }
 
 newtype Opts = Opts
-  { image :: String
+  { image :: Foreign
   , sizes :: Array ImageProps
   }
 
