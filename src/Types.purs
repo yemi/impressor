@@ -25,7 +25,7 @@ type CroppingProps = Size2D
   )
 
 type CanvasPackage =
-  { el :: CanvasElement
+  { canvas :: CanvasElement
   , ctx :: Context2D
   , img :: CanvasImageSource
   }

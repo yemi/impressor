@@ -37,7 +37,7 @@ gulp.task("bundle", ["prebundle"], function () {
     .pipe(gulp.dest("dist"));
 });
 
-gulp.task("compress", ["bundle"], function () {
+gulp.task("compress", ["prebundle"], function () {
   return gulp.src("dist/impressor.js")
     .pipe(uglify())
     .pipe(gulp.dest("dist"));
