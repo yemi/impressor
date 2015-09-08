@@ -1507,7 +1507,6 @@ var PS = { };
   var DOM_HTML_Types = PS["DOM.HTML.Types"];
   var DOM_Node_Document = PS["DOM.Node.Document"];
   var DOM_File_Types = PS["DOM.File.Types"];
-  var Data_Foreign_NullOrUndefined = PS["Data.Foreign.NullOrUndefined"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Maybe_Unsafe = PS["Data.Maybe.Unsafe"];
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
@@ -1544,7 +1543,6 @@ var PS = { };
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Maybe_Unsafe = PS["Data.Maybe.Unsafe"];
   var Data_Foreign = PS["Data.Foreign"];
-  var Data_Foreign_NullOrUndefined = PS["Data.Foreign.NullOrUndefined"];
   var Data_Foreign_Class = PS["Data.Foreign.Class"];
   var Data_Either = PS["Data.Either"];
   var Data_Monoid = PS["Data.Monoid"];
@@ -1555,7 +1553,7 @@ var PS = { };
   var Impressor_DownScale = PS["Impressor.DownScale"];
   var Impressor_Utils = PS["Impressor.Utils"];
   var Impressor_Types = PS["Impressor.Types"];     
-  var imageQuality = 0.85;
+  var imageQuality = 0.8;
   var croppingProps = function (src) {
       return function (target) {
           var targetAspectRatio = Impressor_Utils["aspectRatio'"](Impressor_Utils.aspectRatio(src))(target);
@@ -1567,7 +1565,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return (src.h - src.w / targetAspectRatio) / 2.0;
               };
-              throw new Error("Failed pattern match at Impressor line 41, column 1 - line 42, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 40, column 1 - line 41, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var width = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1576,7 +1574,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return src.w;
               };
-              throw new Error("Failed pattern match at Impressor line 41, column 1 - line 42, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 40, column 1 - line 41, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var left = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1585,7 +1583,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return 0.0;
               };
-              throw new Error("Failed pattern match at Impressor line 41, column 1 - line 42, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 40, column 1 - line 41, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           var height = (function () {
               if (srcHasHigherAspectRatioThanTarget) {
@@ -1594,7 +1592,7 @@ var PS = { };
               if (!srcHasHigherAspectRatioThanTarget) {
                   return src.w / targetAspectRatio;
               };
-              throw new Error("Failed pattern match at Impressor line 41, column 1 - line 42, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
+              throw new Error("Failed pattern match at Impressor line 40, column 1 - line 41, column 1: " + [ srcHasHigherAspectRatioThanTarget.constructor.name ]);
           })();
           return {
               left: left, 
@@ -1604,57 +1602,57 @@ var PS = { };
           };
       };
   };
-  var createImages = function (_11) {
+  var createImages = function (_5) {
       return function (srcSize) {
           return function (targetSizes) {
-              var createImage = function (_12) {
-                  var targetHeight = Data_Maybe.maybe(_12.w / Impressor_Utils.aspectRatio(srcSize))(Prelude.id(Prelude.categoryFn))(_12.h);
-                  var croppingProps$prime = croppingProps(srcSize)(_12);
+              var createImage = function (_6) {
+                  var targetHeight = Data_Maybe.maybe(_6.w / Impressor_Utils.aspectRatio(srcSize))(Prelude.id(Prelude.categoryFn))(_6.h);
+                  var croppingProps$prime = croppingProps(srcSize)(_6);
                   var maxHeight = (function () {
-                      var _29 = croppingProps$prime.h <= targetHeight;
-                      if (_29) {
+                      var _15 = croppingProps$prime.h <= targetHeight;
+                      if (_15) {
                           return targetHeight;
                       };
-                      if (!_29) {
+                      if (!_15) {
                           return croppingProps$prime.h;
                       };
-                      throw new Error("Failed pattern match at Impressor line 56, column 3 - line 57, column 3: " + [ _29.constructor.name ]);
+                      throw new Error("Failed pattern match at Impressor line 55, column 3 - line 56, column 3: " + [ _15.constructor.name ]);
                   })();
                   var maxWidth = (function () {
-                      var _30 = croppingProps$prime.w <= _12.w;
-                      if (_30) {
-                          return _12.w;
+                      var _16 = croppingProps$prime.w <= _6.w;
+                      if (_16) {
+                          return _6.w;
                       };
-                      if (!_30) {
+                      if (!_16) {
                           return croppingProps$prime.w;
                       };
-                      throw new Error("Failed pattern match at Impressor line 56, column 3 - line 57, column 3: " + [ _30.constructor.name ]);
+                      throw new Error("Failed pattern match at Impressor line 55, column 3 - line 56, column 3: " + [ _16.constructor.name ]);
                   })();
-                  var srcScale = croppingProps$prime.w / _12.w;
+                  var srcScale = croppingProps$prime.w / _6.w;
                   return function __do() {
-                      Graphics_Canvas.setCanvasWidth(maxWidth)(_11.canvas)();
-                      Graphics_Canvas.setCanvasHeight(maxHeight)(_11.canvas)();
-                      Graphics_Canvas.drawImageFull(_11.ctx)(_11.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(maxWidth)(maxHeight)();
-                      var _5 = (function () {
-                          var _31 = srcScale > 1.0;
-                          if (_31) {
-                              return Impressor_DownScale.downScaleCanvas(1.0 / srcScale)(_11.canvas);
+                      Graphics_Canvas.setCanvasWidth(maxWidth)(_5.canvas)();
+                      Graphics_Canvas.setCanvasHeight(maxHeight)(_5.canvas)();
+                      Graphics_Canvas.drawImageFull(_5.ctx)(_5.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(maxWidth)(maxHeight)();
+                      var _1 = (function () {
+                          var _17 = srcScale > 1.0;
+                          if (_17) {
+                              return Impressor_DownScale.downScaleCanvas(1.0 / srcScale)(_5.canvas);
                           };
-                          if (!_31) {
-                              return Prelude.pure(Control_Monad_Eff.applicativeEff)(_11.canvas);
+                          if (!_17) {
+                              return Prelude.pure(Control_Monad_Eff.applicativeEff)(_5.canvas);
                           };
-                          throw new Error("Failed pattern match at Impressor line 56, column 3 - line 57, column 3: " + [ _31.constructor.name ]);
+                          throw new Error("Failed pattern match at Impressor line 55, column 3 - line 56, column 3: " + [ _17.constructor.name ]);
                       })()();
-                      var _4 = Impressor_Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_5)();
-                      Graphics_Canvas.clearRect(_11.ctx)({
+                      var _0 = Impressor_Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_1)();
+                      Graphics_Canvas.clearRect(_5.ctx)({
                           x: 0.0, 
                           y: 0.0, 
-                          w: _12.w, 
+                          w: _6.w, 
                           h: targetHeight
                       })();
                       return Prelude["return"](Control_Monad_Eff.applicativeEff)({
-                          name: _12.name, 
-                          blob: Impressor_Utils.unsafeDataUrlToBlob(_4)
+                          name: _6.name, 
+                          blob: Impressor_Utils.unsafeDataUrlToBlob(_0)
                       })();
                   };
               };
@@ -1674,14 +1672,14 @@ var PS = { };
           var createImages$prime = function (img_1) {
               return function (targetSizes) {
                   return function __do() {
-                      var _8 = Impressor_Utils.createCanvasElement();
-                      var _7 = Graphics_Canvas.getContext2D(_8)();
-                      var _6 = Impressor_Utils.getImageSize(img_1)();
+                      var _4 = Impressor_Utils.createCanvasElement();
+                      var _3 = Graphics_Canvas.getContext2D(_4)();
+                      var _2 = Impressor_Utils.getImageSize(img_1)();
                       return createImages({
-                          canvas: _8, 
-                          ctx: _7, 
+                          canvas: _4, 
+                          ctx: _3, 
                           img: img_1
-                      })(_6)(targetSizes)();
+                      })(_2)(targetSizes)();
                   };
               };
           };

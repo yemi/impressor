@@ -35,7 +35,7 @@ import Impressor.Utils
 import Impressor.Types
 
 imageQuality :: Number
-imageQuality = 0.85
+imageQuality = 0.80
 
 croppingProps :: forall a b. Size2D a -> ImageSize -> CroppingProps
 croppingProps src target = { left: left, top: top, w: width, h: height }

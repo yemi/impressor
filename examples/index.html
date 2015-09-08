@@ -56,9 +56,9 @@
           var img = new Image;
 
           img.onload = function (){
-            var blobs = PS.Impressor.impress(img)(sizes)();
-            blobs.forEach(function(blob) {
-              console.log(blob)
+            var blobsObjs = PS.Impressor.impress(img)(sizes)();
+            blobsObjs.forEach(function(blobObj) {
+              console.log(blobObj)
               var blobReader = new FileReader();
 
               blobReader.onload = function (e) {
@@ -74,7 +74,7 @@
 
               }
 
-              blobReader.readAsDataURL(blob.blob);
+              blobReader.readAsDataURL(blobObj.blob);
 
             })
           }
