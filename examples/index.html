@@ -40,6 +40,10 @@
           width: 1000,
           height: 900,
           name: "large"
+        },
+        {
+          width: 1000,
+          name: "large_no_height"
         }
       ]
 
@@ -55,22 +59,22 @@
             var blobs = PS.Impressor.impress(img)(sizes)();
             blobs.forEach(function(blob) {
               console.log(blob)
-              // var blobReader = new FileReader();
-              //
-              // blobReader.onload = function (e) {
-              //   blobStr = e.target.result;
-              //   blobImg = new Image;
-              //
-              //   console.log(blobStr)
-              //
-              //   blobImg.onload = function () {
-              //     // image loaded
-              //   }
-              //   blobImg.src = blobStr;
-              //
-              // }
-              //
-              // blobReader.readAsDataURL(blob);
+              var blobReader = new FileReader();
+
+              blobReader.onload = function (e) {
+                blobStr = e.target.result;
+                blobImg = new Image;
+
+                console.log(blobStr)
+
+                blobImg.onload = function () {
+                  // image loaded
+                }
+                blobImg.src = blobStr;
+
+              }
+
+              blobReader.readAsDataURL(blob.blob);
 
             })
           }

@@ -24,7 +24,11 @@ gulp.task("prebundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
     output: "dist/impressor.js",
-    module: ["Impressor", "Utils", "Types"]
+    module: [
+      "Impressor",
+      "Impressor.Utils",
+      "Impressor.Types"
+    ]
   });
 });
 
