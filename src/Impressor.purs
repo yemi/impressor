@@ -14,7 +14,10 @@ import Data.Monoid
 import Data.Functor (($>))
 
 import Control.Monad.Eff (Eff())
+import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Exception (EXCEPTION(), error, throwException)
+import Control.Monad.Aff (launchAff)
+import Control.Monad.Aff.Console (log)
 
 import Graphics.Canvas
   ( Canvas()
@@ -22,6 +25,7 @@ import Graphics.Canvas
   , Context2D()
   , CanvasImageSource()
   , getContext2D
+  , getImageData
   , setCanvasWidth
   , setCanvasHeight
   , drawImageFull
@@ -98,3 +102,9 @@ impress img sizes = either parsingErrorHandler (createImages' parsedImg) parsedS
     ctx <- getContext2D canvas
     srcSize <- getImageSize img
     createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes
+
+main = launchAff $ do
+  srcImageData <- liftEff $ createBlankImageData { w:600.0, h:400.0 }
+  blankTargetImageData <- liftEff $ createBlankImageData { w:300.0, h:200.0 }
+  resImageData <- downScaleImageWorker 0.5 srcImageData blankTargetImageData
+  log "färdi!"

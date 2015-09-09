@@ -6,7 +6,7 @@
 
 // scales the canvas by (float) scale < 1
 // returns a new canvas containing the scaled image.
-function downScaleCanvasImpl (scale, cv) {
+exports.downScaleCanvasImpl = function (scale, cv) {
   return function () {
     if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
     var sqScale = scale * scale; // square scale = area of source pixel within target
@@ -110,7 +110,7 @@ function downScaleCanvasImpl (scale, cv) {
         }
       } // end for sx
     } // end for sy
-    
+
     // create result canvas
     var resCV = document.createElement('canvas');
     resCV.width = tw;
@@ -131,5 +131,3 @@ function downScaleCanvasImpl (scale, cv) {
     return resCV;
   }
 }
-
-exports.downScaleCanvasImpl = downScaleCanvasImpl;
