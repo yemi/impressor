@@ -1,6 +1,6 @@
 "use strict";
 
-// module Impressor.DownScale
+// module Impressor.DownScaleCanvas
 
 // Algorithm by @GameAlchemist at http://stackoverflow.com/a/19144434/1584052
 
@@ -12,8 +12,8 @@ function downScaleCanvasImpl (scale, cv) {
     var sqScale = scale * scale; // square scale = area of source pixel within target
     var sw = cv.width; // source image width
     var sh = cv.height; // source image height
-    var tw = Math.floor(sw * scale); // target image width
-    var th = Math.floor(sh * scale); // target image height
+    var tw = Math.ceil(sw * scale); // target image width
+    var th = Math.ceil(sh * scale); // target image height
     var sx = 0, sy = 0, sIndex = 0; // source x,y, index within source array
     var tx = 0, ty = 0, yIndex = 0, tIndex = 0; // target x,y, x,y index within target array
     var tX = 0, tY = 0; // rounded tx, ty
@@ -22,8 +22,7 @@ function downScaleCanvasImpl (scale, cv) {
     // next weight is weight of current source point within next target's point.
     var crossX = false; // does scaled px cross its current px right border ?
     var crossY = false; // does scaled px cross its current px bottom border ?
-    var sBuffer = cv.getContext('2d').
-    getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
+    var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
     var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
     var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
     /* untested !
@@ -111,7 +110,7 @@ function downScaleCanvasImpl (scale, cv) {
         }
       } // end for sx
     } // end for sy
-
+    
     // create result canvas
     var resCV = document.createElement('canvas');
     resCV.width = tw;

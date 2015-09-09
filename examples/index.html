@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://www.w3.org/2000/svg">
   <head>
     <title>Impressor</title>
+    
     <style>
       body {
         max-width: 800px;
@@ -9,6 +10,7 @@
       }
     </style>
   </head>
+
   <body>
     <div>
       <input type="file" id="file" />
@@ -21,9 +23,10 @@
     <script src="../dist/impressor.js"></script>
 
     <script>
-
       var button = document.getElementById("submit");
       var fileChooser = document.getElementById("file");
+      var chosenImg = new Image;
+      var reader = new FileReader();
 
       var sizes = [
         {
@@ -45,41 +48,34 @@
           width: 1000,
           name: "large_no_height"
         }
-      ]
+      ];
+
+      var processedImgReaderOnLoad = function (e) {
+        var blobStr = e.target.result;
+        console.log(blobStr)
+      }
+
+      var fileImageOnLoad = function () {
+        console.log("loading");
+        var processedImgs = PS.Impressor.impress(chosenImg)(sizes)();
+        console.log("loading done")
+        processedImgs.forEach(function(processedImg) {
+          console.log(processedImg)
+          var processedImgReader = new FileReader();
+          processedImgReader.onload = processedImgReaderOnLoad;
+          processedImgReader.readAsDataURL(processedImg.blob);
+        })
+      }
+
+      var readerOnLoad = function (e){
+        var str = e.target.result;
+        chosenImg.onload = fileImageOnLoad;
+        chosenImg.src = str;
+      }
 
       button.addEventListener("click", function () {
         var file = fileChooser.files[0];
-        var reader = new FileReader();
-
-        reader.onload = function(e){
-          var str = e.target.result;
-          var img = new Image;
-
-          img.onload = function (){
-            var blobsObjs = PS.Impressor.impress(img)(sizes)();
-            blobsObjs.forEach(function(blobObj) {
-              console.log(blobObj)
-              var blobReader = new FileReader();
-
-              blobReader.onload = function (e) {
-                blobStr = e.target.result;
-                blobImg = new Image;
-
-                console.log(blobStr)
-
-                blobImg.onload = function () {
-                  // image loaded
-                }
-                blobImg.src = blobStr;
-
-              }
-
-              blobReader.readAsDataURL(blobObj.blob);
-
-            })
-          }
-          img.src = str;
-        }
+        reader.onload = readerOnLoad;
         reader.readAsDataURL(file);
       }, false)
 

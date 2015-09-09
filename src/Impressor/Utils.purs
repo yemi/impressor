@@ -40,5 +40,5 @@ createCanvasElement = do
 aspectRatio :: forall a. Size2D a -> Number
 aspectRatio { w:w, h:h } = w / h
 
-aspectRatio' :: Number -> ImageSize -> Number
-aspectRatio' sourceRatio (ImageSize { w:w, h:h }) = w / (maybe (w / sourceRatio) id h)
+aspectRatio' :: Number -> TargetSize -> Number
+aspectRatio' sourceRatio (TargetSize { w:w, h:h }) = w / (maybe (w / sourceRatio) id h)

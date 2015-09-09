@@ -2,7 +2,7 @@ module Impressor.Types
   ( Size2D()
   , CroppingProps()
   , CanvasPackage()
-  , ImageSize(..)
+  , TargetSize(..)
   , ProcessedImage()
   , elementToCanvasElement
   , htmlElementToCanvasImageSource
@@ -43,15 +43,15 @@ type ProcessedImage =
   , blob :: Blob
   }
 
-newtype ImageSize = ImageSize
+newtype TargetSize = TargetSize
   { w :: Number
   , h :: Maybe Number
   , name :: String
   }
 
-instance isForeignImageSize :: IsForeign ImageSize where
+instance isForeignTargetSize :: IsForeign TargetSize where
   read obj =
-    ImageSize <$> ({ w: _
+    TargetSize <$> ({ w: _
                    , h: _
                    , name: _
                    } <$> readProp "width" obj
@@ -60,7 +60,7 @@ instance isForeignImageSize :: IsForeign ImageSize where
 
 foreign import elementToCanvasElement :: Element -> CanvasElement
 
-foreign import htmlElementToCanvasImageSourceImpl :: forall r eff. Fn3 HTMLElement (CanvasImageSource -> r) r r
-
 htmlElementToCanvasImageSource :: forall eff. HTMLElement -> Maybe CanvasImageSource
 htmlElementToCanvasImageSource el = runFn3 htmlElementToCanvasImageSourceImpl el Just Nothing
+
+foreign import htmlElementToCanvasImageSourceImpl :: forall r eff. Fn3 HTMLElement (CanvasImageSource -> r) r r
