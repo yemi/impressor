@@ -33,7 +33,7 @@ import Graphics.Canvas
   , clearRect
   )
 
-import Impressor.DownScaleImageData (downScaleImageData)
+import Impressor.DownScaleImage (downScaleImage)
 import Impressor.Utils
 import Impressor.Types
 
@@ -65,7 +65,7 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
 
     -- | Draw the cropped, non down scaled image to the context
     drawImageFull ctx
-                  img
+                  img -- Source image
                   croppingProps'.left -- Amount to crop from the left
                   croppingProps'.top -- Amount to crop from the top
                   croppingProps'.w -- Width of the cropped, unscaled image
@@ -78,8 +78,8 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
     -- | Get image data for the cropped, non down scaled image
     srcImageData <- getImageData ctx 0.0 0.0 maxWidth maxHeight
 
-    -- | Since we have our srcImageData, prepare final image output by matching canvas size with target size
-    -- | TODO: dont call this function if there is no need to down scale the image
+    -- | Since we have our srcImageData, prepare final image output by matching the canvas size with the target size
+    -- | TODO: dont call these functions if there is no need to down scale the image
     setCanvasWidth targetWidth canvas
     setCanvasHeight targetHeight canvas
 
@@ -87,8 +87,8 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
     -- | TODO: dont call this function if there is no need to down scale the image
     blankTargetImageData <- createBlankImageData { w:targetWidth, h:targetHeight }
 
-    -- | For better image quality, use the downScaleImageData algorithm when scaling down images
-    let resImageData = if srcScale > 1.0 then downScaleImageData (1.0 / srcScale) srcImageData blankTargetImageData else srcImageData
+    -- | For better image quality, use the downScaleImage algorithm when scaling down images
+    let resImageData = if srcScale > 1.0 then downScaleImage (1.0 / srcScale) srcImageData blankTargetImageData else srcImageData
 
     -- | Draw the resulting image to the context
     putImageData ctx resImageData 0.0 0.0
@@ -124,3 +124,9 @@ impress img sizes = either parsingErrorHandler (createImages' parsedImg) parsedS
     ctx <- getContext2D canvas
     srcSize <- getImageSize img
     createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes
+
+main = launchAff $ do
+  srcImageData <- liftEff $ createBlankImageData { w:600.0, h:400.0 }
+  blankTargetImageData <- liftEff $ createBlankImageData { w:300.0, h:200.0 }
+  resImageData <- downScaleImageWorker 0.5 srcImageData blankTargetImageData
+  log "färdi!"

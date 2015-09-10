@@ -1,10 +1,10 @@
 "use strict";
 
-// module Impressor.DownScaleImageData
+// module Impressor.DownScaleImage
 
 // Algorithm by @GameAlchemist at http://stackoverflow.com/a/19144434/1584052
 
-exports.downScaleImageDataImpl = function (scale, srcImageData, blankTargetImageData) {
+exports.downScaleImageImpl = function (scale, srcImageData, blankTargetImageData) {
   var sqScale = scale * scale; // square scale = area of source pixel within target
   var sw = srcImageData.width; // source image width
   var sh = srcImageData.height; // source image height
