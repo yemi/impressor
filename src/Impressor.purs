@@ -26,14 +26,14 @@ import Graphics.Canvas
   , CanvasImageSource()
   , getContext2D
   , getImageData
+  , putImageData
   , setCanvasWidth
   , setCanvasHeight
   , drawImageFull
   , clearRect
   )
 
-import Impressor.DownScaleCanvas (downScaleCanvas)
-
+import Impressor.DownScaleImageData (downScaleImageData)
 import Impressor.Utils
 import Impressor.Types
 
@@ -71,8 +71,12 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
                   maxHeight -- Scale it up to target height or don't scale at all
 
     -- For better image quality, use the downScaleCanvas algorithm when scaling down images
-    canvas' <- if srcScale > 1.0 then downScaleCanvas (1.0 / srcScale) canvas else pure canvas
-    dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality canvas'
+    -- canvas' <- if srcScale > 1.0 then downScaleCanvas (1.0 / srcScale) canvas else pure canvas
+    srcImageData <- getImageData ctx 0.0 0.0 maxWidth maxHeight
+    blankTargetImageData <- createBlankImageData { w:targetSize.w, h:targetHeight }
+    let resImageData = downScaleImageData srcScale srcImageData blankTargetImageData
+    putImageData ctx resImageData 0.0 0.0
+    dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality canvas
     clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetHeight } -- Clear the canvas
     return { name: targetSize.name, blob: unsafeDataUrlToBlob dataUrl }
 

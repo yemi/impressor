@@ -128,7 +128,7 @@ var PS = { };
       return eq(__dict_Eq_7);
   };
   var $$const = function (a) {
-      return function (_82) {
+      return function (_116) {
           return a;
       };
   };
@@ -168,9 +168,9 @@ var PS = { };
   var ap = function (__dict_Monad_30) {
       return function (f) {
           return function (a) {
-              return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(f)(function (_16) {
-                  return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(a)(function (_15) {
-                      return $$return(__dict_Monad_30["__superclass_Prelude.Applicative_0"]())(_16(_15));
+              return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(f)(function (_31) {
+                  return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(a)(function (_30) {
+                      return $$return(__dict_Monad_30["__superclass_Prelude.Applicative_0"]())(_31(_30));
                   });
               });
           };
@@ -525,14 +525,14 @@ var PS = { };
   })();
   var maybe = function (b) {
       return function (f) {
-          return function (_249) {
-              if (_249 instanceof Nothing) {
+          return function (_307) {
+              if (_307 instanceof Nothing) {
                   return b;
               };
-              if (_249 instanceof Just) {
-                  return f(_249.value0);
+              if (_307 instanceof Just) {
+                  return f(_307.value0);
               };
-              throw new Error("Failed pattern match at Data.Maybe line 26, column 1 - line 27, column 1: " + [ b.constructor.name, f.constructor.name, _249.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Maybe line 26, column 1 - line 27, column 1: " + [ b.constructor.name, f.constructor.name, _307.constructor.name ]);
           };
       };
   };
@@ -729,46 +729,46 @@ var PS = { };
       return Right;
   })();
   var functorEither = new Prelude.Functor(function (f) {
-      return function (_334) {
-          if (_334 instanceof Left) {
-              return new Left(_334.value0);
+      return function (_426) {
+          if (_426 instanceof Left) {
+              return new Left(_426.value0);
           };
-          if (_334 instanceof Right) {
-              return new Right(f(_334.value0));
+          if (_426 instanceof Right) {
+              return new Right(f(_426.value0));
           };
-          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _334.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _426.constructor.name ]);
       };
   });
   var either = function (f) {
       return function (g) {
-          return function (_333) {
-              if (_333 instanceof Left) {
-                  return f(_333.value0);
+          return function (_425) {
+              if (_425 instanceof Left) {
+                  return f(_425.value0);
               };
-              if (_333 instanceof Right) {
-                  return g(_333.value0);
+              if (_425 instanceof Right) {
+                  return g(_425.value0);
               };
-              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _333.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _425.constructor.name ]);
           };
       };
   }; 
   var applyEither = new Prelude.Apply(function () {
       return functorEither;
-  }, function (_336) {
+  }, function (_428) {
       return function (r) {
-          if (_336 instanceof Left) {
-              return new Left(_336.value0);
+          if (_428 instanceof Left) {
+              return new Left(_428.value0);
           };
-          if (_336 instanceof Right) {
-              return Prelude["<$>"](functorEither)(_336.value0)(r);
+          if (_428 instanceof Right) {
+              return Prelude["<$>"](functorEither)(_428.value0)(r);
           };
-          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _336.constructor.name, r.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _428.constructor.name, r.constructor.name ]);
       };
   });
   var bindEither = new Prelude.Bind(function () {
       return applyEither;
   }, either(function (e) {
-      return function (_332) {
+      return function (_424) {
           return new Left(e);
       };
   })(function (a) {
@@ -817,8 +817,8 @@ var PS = { };
   var makeAff$prime = function (h) {
       return $foreign._makeAff(h);
   };
-  var launchAff = function (_1389) {
-      return runAff(Control_Monad_Eff_Exception.throwException)(Prelude["const"](Prelude.pure(Control_Monad_Eff.applicativeEff)(Prelude.unit)))($foreign._unsafeInterleaveAff(_1389));
+  var launchAff = function (_1790) {
+      return runAff(Control_Monad_Eff_Exception.throwException)(Prelude["const"](Prelude.pure(Control_Monad_Eff.applicativeEff)(Prelude.unit)))($foreign._unsafeInterleaveAff(_1790));
   };
   var functorAff = new Prelude.Functor(function (f) {
       return function (fa) {
@@ -1018,20 +1018,20 @@ var PS = { };
           return new Data_Either.Left(new TypeMismatch(tag, $foreign.tagOf(value)));
       };
   };
-  var showForeignError = new Prelude.Show(function (_358) {
-      if (_358 instanceof TypeMismatch) {
-          return "Type mismatch: expected " + (_358.value0 + (", found " + _358.value1));
+  var showForeignError = new Prelude.Show(function (_450) {
+      if (_450 instanceof TypeMismatch) {
+          return "Type mismatch: expected " + (_450.value0 + (", found " + _450.value1));
       };
-      if (_358 instanceof ErrorAtIndex) {
-          return "Error at array index " + (Prelude.show(Prelude.showInt)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
+      if (_450 instanceof ErrorAtIndex) {
+          return "Error at array index " + (Prelude.show(Prelude.showInt)(_450.value0) + (": " + Prelude.show(showForeignError)(_450.value1)));
       };
-      if (_358 instanceof ErrorAtProperty) {
-          return "Error at property " + (Prelude.show(Prelude.showString)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
+      if (_450 instanceof ErrorAtProperty) {
+          return "Error at property " + (Prelude.show(Prelude.showString)(_450.value0) + (": " + Prelude.show(showForeignError)(_450.value1)));
       };
-      if (_358 instanceof JSONError) {
-          return "JSON error: " + _358.value0;
+      if (_450 instanceof JSONError) {
+          return "JSON error: " + _450.value0;
       };
-      throw new Error("Failed pattern match: " + [ _358.constructor.name ]);
+      throw new Error("Failed pattern match: " + [ _450.constructor.name ]);
   });
   var readString = unsafeReadTagged("String");
   var readNumber = unsafeReadTagged("Number");  
@@ -1232,16 +1232,16 @@ var PS = { };
   var NullOrUndefined = function (x) {
       return x;
   };
-  var runNullOrUndefined = function (_362) {
-      return _362;
+  var runNullOrUndefined = function (_454) {
+      return _454;
   };
   var readNullOrUndefined = function (f) {
       return function (value) {
           if (Data_Foreign.isNull(value) || Data_Foreign.isUndefined(value)) {
               return Prelude.pure(Data_Either.applicativeEither)(Data_Maybe.Nothing.value);
           };
-          return Prelude["<$>"](Data_Either.functorEither)(function (_1298) {
-              return NullOrUndefined(Data_Maybe.Just.create(_1298));
+          return Prelude["<$>"](Data_Either.functorEither)(function (_1695) {
+              return NullOrUndefined(Data_Maybe.Just.create(_1695));
           })(f(value));
       };
   };
@@ -1273,8 +1273,8 @@ var PS = { };
   var readWith = function (__dict_IsForeign_1) {
       return function (f) {
           return function (value) {
-              return Data_Either.either(function (_1879) {
-                  return Data_Either.Left.create(f(_1879));
+              return Data_Either.either(function (_2438) {
+                  return Data_Either.Left.create(f(_2438));
               })(Data_Either.Right.create)(read(__dict_IsForeign_1)(value));
           };
       };
@@ -1467,6 +1467,19 @@ var PS = { };
       };
   };
 
+  exports.putImageData = function(ctx) {
+      return function(image_data) {
+          return function(x) {
+              return function(y) {
+                  return function() {
+                      ctx.putImageData(image_data, x, y);
+                      return ctx;
+                  };
+              };
+          };
+      };
+  };
+
   exports.drawImage = function(ctx) {
       return function(image_source) {
           return function(dx) {
@@ -1513,10 +1526,9 @@ var PS = { };
   var Prelude = PS["Prelude"];
   var Data_Function = PS["Data.Function"];
   var Data_Maybe = PS["Data.Maybe"];
-  var Data_Foreign = PS["Data.Foreign"];
-  var Data_Foreign_Class = PS["Data.Foreign.Class"];
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
   exports["drawImageFull"] = $foreign.drawImageFull;
+  exports["putImageData"] = $foreign.putImageData;
   exports["getImageData"] = $foreign.getImageData;
   exports["clearRect"] = $foreign.clearRect;
   exports["setCanvasHeight"] = $foreign.setCanvasHeight;
@@ -1527,156 +1539,144 @@ var PS = { };
 (function(exports) {
   "use strict";
 
-  // module Impressor.DownScaleCanvas
+  // module Impressor.DownScaleImageData
 
   // Algorithm by @GameAlchemist at http://stackoverflow.com/a/19144434/1584052
 
-  // scales the canvas by (float) scale < 1
-  // returns a new canvas containing the scaled image.
-  exports.downScaleCanvasImpl = function (scale, cv) {
-    return function () {
-      if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
-      var sqScale = scale * scale; // square scale = area of source pixel within target
-      var sw = cv.width; // source image width
-      var sh = cv.height; // source image height
-      var tw = Math.ceil(sw * scale); // target image width
-      var th = Math.ceil(sh * scale); // target image height
-      var sx = 0, sy = 0, sIndex = 0; // source x,y, index within source array
-      var tx = 0, ty = 0, yIndex = 0, tIndex = 0; // target x,y, x,y index within target array
-      var tX = 0, tY = 0; // rounded tx, ty
-      var w = 0, nw = 0, wx = 0, nwx = 0, wy = 0, nwy = 0; // weight / next weight x / y
-      // weight is weight of current source point within target.
-      // next weight is weight of current source point within next target's point.
-      var crossX = false; // does scaled px cross its current px right border ?
-      var crossY = false; // does scaled px cross its current px bottom border ?
-      var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
-      var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
-      var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
-      /* untested !
-    var sA = 0;  //source alpha  */  
+  exports.downScaleImageDataImpl = function (scale, srcImageData, blankTargetImageData) {
+    var sqScale = scale * scale; // square scale = area of source pixel within target
+    var sw = srcImageData.width; // source image width
+    var sh = srcImageData.height; // source image height
+    var tw = blankTargetImageData.width; // target image width
+    var th = blankTargetImageData.height; // target image height
+    var sx = 0, sy = 0, sIndex = 0; // source x,y, index within source array
+    var tx = 0, ty = 0, yIndex = 0, tIndex = 0; // target x,y, x,y index within target array
+    var tX = 0, tY = 0; // rounded tx, ty
+    var w = 0, nw = 0, wx = 0, nwx = 0, wy = 0, nwy = 0; // weight / next weight x / y
+    // weight is weight of current source point within target.
+    // next weight is weight of current source point within next target's point.
+    var crossX = false; // does scaled px cross its current px right border ?
+    var crossY = false; // does scaled px cross its current px bottom border ?
+    var sBuffer = srcImageData.data; // source buffer 8 bit rgba
+    // var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
+    var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
+    var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
+    /* untested !
+  var sA = 0;  //source alpha  */  
 
-      for (sy = 0; sy < sh; sy++) {
-        ty = sy * scale; // y src position within target
-        tY = 0 | ty;     // rounded : target pixel's y
-        yIndex = 3 * tY * tw;  // line index within target array
-        crossY = (tY != (0 | ty + scale));
-        if (crossY) { // if pixel is crossing botton target pixel
-          wy = (tY + 1 - ty); // weight of point within target pixel
-          nwy = (ty + scale - tY - 1); // ... within y+1 target pixel
-        }
-        for (sx = 0; sx < sw; sx++, sIndex += 4) {
-          tx = sx * scale; // x src position within target
-          tX = 0 |  tx;    // rounded : target pixel's x
-          tIndex = yIndex + tX * 3; // target pixel index within target array
-          crossX = (tX != (0 | tx + scale));
-          if (crossX) { // if pixel is crossing target pixel's right
-            wx = (tX + 1 - tx); // weight of point within target pixel
-            nwx = (tx + scale - tX - 1); // ... within x+1 target pixel
-          }
-          sR = sBuffer[sIndex    ];   // retrieving r,g,b for curr src px.
-          sG = sBuffer[sIndex + 1];
-          sB = sBuffer[sIndex + 2];
-
-          /* !! untested : handling alpha !!
-        sA = sBuffer[sIndex + 3];
-        if (!sA) continue;
-        if (sA != 0xFF) {
-        sR = (sR * sA) >> 8;  // or use /256 instead ??
-        sG = (sG * sA) >> 8;
-        sB = (sB * sA) >> 8;
-        }
-        */  
-          if (!crossX && !crossY) { // pixel does not cross
-            // just add components weighted by squared scale.
-            tBuffer[tIndex    ] += sR * sqScale;
-            tBuffer[tIndex + 1] += sG * sqScale;
-            tBuffer[tIndex + 2] += sB * sqScale;
-          } else if (crossX && !crossY) { // cross on X only
-            w = wx * scale;
-            // add weighted component for current px
-            tBuffer[tIndex    ] += sR * w;
-            tBuffer[tIndex + 1] += sG * w;
-            tBuffer[tIndex + 2] += sB * w;
-            // add weighted component for next (tX+1) px
-            nw = nwx * scale
-            tBuffer[tIndex + 3] += sR * nw;
-            tBuffer[tIndex + 4] += sG * nw;
-            tBuffer[tIndex + 5] += sB * nw;
-          } else if (crossY && !crossX) { // cross on Y only
-            w = wy * scale;
-            // add weighted component for current px
-            tBuffer[tIndex    ] += sR * w;
-            tBuffer[tIndex + 1] += sG * w;
-            tBuffer[tIndex + 2] += sB * w;
-            // add weighted component for next (tY+1) px
-            nw = nwy * scale
-            tBuffer[tIndex + 3 * tw    ] += sR * nw;
-            tBuffer[tIndex + 3 * tw + 1] += sG * nw;
-            tBuffer[tIndex + 3 * tw + 2] += sB * nw;
-          } else { // crosses both x and y : four target points involved
-            // add weighted component for current px
-            w = wx * wy;
-            tBuffer[tIndex    ] += sR * w;
-            tBuffer[tIndex + 1] += sG * w;
-            tBuffer[tIndex + 2] += sB * w;
-            // for tX + 1; tY px
-            nw = nwx * wy;
-            tBuffer[tIndex + 3] += sR * nw;
-            tBuffer[tIndex + 4] += sG * nw;
-            tBuffer[tIndex + 5] += sB * nw;
-            // for tX ; tY + 1 px
-            nw = wx * nwy;
-            tBuffer[tIndex + 3 * tw    ] += sR * nw;
-            tBuffer[tIndex + 3 * tw + 1] += sG * nw;
-            tBuffer[tIndex + 3 * tw + 2] += sB * nw;
-            // for tX + 1 ; tY +1 px
-            nw = nwx * nwy;
-            tBuffer[tIndex + 3 * tw + 3] += sR * nw;
-            tBuffer[tIndex + 3 * tw + 4] += sG * nw;
-            tBuffer[tIndex + 3 * tw + 5] += sB * nw;
-          }
-        } // end for sx
-      } // end for sy
-
-      // create result canvas
-      var resCV = document.createElement('canvas');
-      resCV.width = tw;
-      resCV.height = th;
-      var resCtx = resCV.getContext('2d');
-      var imgRes = resCtx.getImageData(0, 0, tw, th);
-      var tByteBuffer = imgRes.data;
-      // convert float32 array into a UInt8Clamped Array
-      var pxIndex = 0; //
-      for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
-        tByteBuffer[tIndex] = Math.ceil(tBuffer[sIndex]);
-        tByteBuffer[tIndex + 1] = Math.ceil(tBuffer[sIndex + 1]);
-        tByteBuffer[tIndex + 2] = Math.ceil(tBuffer[sIndex + 2]);
-        tByteBuffer[tIndex + 3] = 255;
+    for (sy = 0; sy < sh; sy++) {
+      ty = sy * scale; // y src position within target
+      tY = 0 | ty;     // rounded : target pixel's y
+      yIndex = 3 * tY * tw;  // line index within target array
+      crossY = (tY != (0 | ty + scale));
+      if (crossY) { // if pixel is crossing botton target pixel
+        wy = (tY + 1 - ty); // weight of point within target pixel
+        nwy = (ty + scale - tY - 1); // ... within y+1 target pixel
       }
-      // writing result to canvas.
-      resCtx.putImageData(imgRes, 0, 0);
-      return resCV;
+      for (sx = 0; sx < sw; sx++, sIndex += 4) {
+        tx = sx * scale; // x src position within target
+        tX = 0 |  tx;    // rounded : target pixel's x
+        tIndex = yIndex + tX * 3; // target pixel index within target array
+        crossX = (tX != (0 | tx + scale));
+        if (crossX) { // if pixel is crossing target pixel's right
+          wx = (tX + 1 - tx); // weight of point within target pixel
+          nwx = (tx + scale - tX - 1); // ... within x+1 target pixel
+        }
+        sR = sBuffer[sIndex    ];   // retrieving r,g,b for curr src px.
+        sG = sBuffer[sIndex + 1];
+        sB = sBuffer[sIndex + 2];
+
+        /* !! untested : handling alpha !!
+      sA = sBuffer[sIndex + 3];
+      if (!sA) continue;
+      if (sA != 0xFF) {
+      sR = (sR * sA) >> 8;  // or use /256 instead ??
+      sG = (sG * sA) >> 8;
+      sB = (sB * sA) >> 8;
+      }
+      */  
+        if (!crossX && !crossY) { // pixel does not cross
+          // just add components weighted by squared scale.
+          tBuffer[tIndex    ] += sR * sqScale;
+          tBuffer[tIndex + 1] += sG * sqScale;
+          tBuffer[tIndex + 2] += sB * sqScale;
+        } else if (crossX && !crossY) { // cross on X only
+          w = wx * scale;
+          // add weighted component for current px
+          tBuffer[tIndex    ] += sR * w;
+          tBuffer[tIndex + 1] += sG * w;
+          tBuffer[tIndex + 2] += sB * w;
+          // add weighted component for next (tX+1) px
+          nw = nwx * scale
+          tBuffer[tIndex + 3] += sR * nw;
+          tBuffer[tIndex + 4] += sG * nw;
+          tBuffer[tIndex + 5] += sB * nw;
+        } else if (crossY && !crossX) { // cross on Y only
+          w = wy * scale;
+          // add weighted component for current px
+          tBuffer[tIndex    ] += sR * w;
+          tBuffer[tIndex + 1] += sG * w;
+          tBuffer[tIndex + 2] += sB * w;
+          // add weighted component for next (tY+1) px
+          nw = nwy * scale
+          tBuffer[tIndex + 3 * tw    ] += sR * nw;
+          tBuffer[tIndex + 3 * tw + 1] += sG * nw;
+          tBuffer[tIndex + 3 * tw + 2] += sB * nw;
+        } else { // crosses both x and y : four target points involved
+          // add weighted component for current px
+          w = wx * wy;
+          tBuffer[tIndex    ] += sR * w;
+          tBuffer[tIndex + 1] += sG * w;
+          tBuffer[tIndex + 2] += sB * w;
+          // for tX + 1; tY px
+          nw = nwx * wy;
+          tBuffer[tIndex + 3] += sR * nw;
+          tBuffer[tIndex + 4] += sG * nw;
+          tBuffer[tIndex + 5] += sB * nw;
+          // for tX ; tY + 1 px
+          nw = wx * nwy;
+          tBuffer[tIndex + 3 * tw    ] += sR * nw;
+          tBuffer[tIndex + 3 * tw + 1] += sG * nw;
+          tBuffer[tIndex + 3 * tw + 2] += sB * nw;
+          // for tX + 1 ; tY +1 px
+          nw = nwx * nwy;
+          tBuffer[tIndex + 3 * tw + 3] += sR * nw;
+          tBuffer[tIndex + 3 * tw + 4] += sG * nw;
+          tBuffer[tIndex + 3 * tw + 5] += sB * nw;
+        }
+      } // end for sx
+    } // end for sy
+
+    var tByteBuffer = blankTargetImageData.data;
+    // convert float32 array into a UInt8Clamped Array
+    var pxIndex = 0; //
+    for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
+      tByteBuffer[tIndex] = Math.ceil(tBuffer[sIndex]);
+      tByteBuffer[tIndex + 1] = Math.ceil(tBuffer[sIndex + 1]);
+      tByteBuffer[tIndex + 2] = Math.ceil(tBuffer[sIndex + 2]);
+      tByteBuffer[tIndex + 3] = 255;
     }
+    return blankTargetImageData;
   }
  
-})(PS["Impressor.DownScaleCanvas"] = PS["Impressor.DownScaleCanvas"] || {});
+})(PS["Impressor.DownScaleImageData"] = PS["Impressor.DownScaleImageData"] || {});
 (function(exports) {
   // Generated by psc version 0.7.4.1
   "use strict";
-  var $foreign = PS["Impressor.DownScaleCanvas"];
+  var $foreign = PS["Impressor.DownScaleImageData"];
   var Prelude = PS["Prelude"];
-  var DOM = PS["DOM"];
   var Data_Function = PS["Data.Function"];
-  var Control_Monad_Eff = PS["Control.Monad.Eff"];
   var Graphics_Canvas = PS["Graphics.Canvas"];     
-  var downScaleCanvas = function (scale) {
-      return function (canvas) {
-          return $foreign.downScaleCanvasImpl(scale, canvas);
+  var downScaleImageData = function (scale) {
+      return function (srcImageData) {
+          return function (blankTargetImageData) {
+              return $foreign.downScaleImageDataImpl(scale, srcImageData, blankTargetImageData);
+          };
       };
   };
-  exports["downScaleCanvas"] = downScaleCanvas;;
+  exports["downScaleImageData"] = downScaleImageData;;
  
-})(PS["Impressor.DownScaleCanvas"] = PS["Impressor.DownScaleCanvas"] || {});
+})(PS["Impressor.DownScaleImageData"] = PS["Impressor.DownScaleImageData"] || {});
 (function(exports) {
   "use strict";
 
@@ -1829,25 +1829,25 @@ var PS = { };
       };
   };
   var createCanvasElement = function __do() {
-      var _0 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
-      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Impressor_Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_0))();
+      var _3 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
+      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Impressor_Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_3))();
   };
-  var createBlankImageData = function (_11) {
+  var createBlankImageData = function (_14) {
       return function __do() {
-          var _2 = createCanvasElement();
-          var _1 = Graphics_Canvas.getContext2D(_2)();
-          Graphics_Canvas.setCanvasWidth(_11.w)(_2)();
-          Graphics_Canvas.setCanvasHeight(_11.h)(_2)();
-          return Graphics_Canvas.getImageData(_1)(0.0)(0.0)(_11.w)(_11.h)();
+          var _5 = createCanvasElement();
+          var _4 = Graphics_Canvas.getContext2D(_5)();
+          Graphics_Canvas.setCanvasWidth(_14.w)(_5)();
+          Graphics_Canvas.setCanvasHeight(_14.h)(_5)();
+          return Graphics_Canvas.getImageData(_4)(0.0)(0.0)(_14.w)(_14.h)();
       };
   };
   var aspectRatio$prime = function (sourceRatio) {
-      return function (_13) {
-          return _13.w / Data_Maybe.maybe(_13.w / sourceRatio)(Prelude.id(Prelude.categoryFn))(_13.h);
+      return function (_16) {
+          return _16.w / Data_Maybe.maybe(_16.w / sourceRatio)(Prelude.id(Prelude.categoryFn))(_16.h);
       };
   };
-  var aspectRatio = function (_12) {
-      return _12.w / _12.h;
+  var aspectRatio = function (_15) {
+      return _15.w / _15.h;
   };
   exports["downScaleImageWorker"] = downScaleImageWorker;
   exports["aspectRatio'"] = aspectRatio$prime;
@@ -1878,18 +1878,18 @@ var PS = { };
   var Control_Monad_Aff = PS["Control.Monad.Aff"];
   var Control_Monad_Aff_Console = PS["Control.Monad.Aff.Console"];
   var Graphics_Canvas = PS["Graphics.Canvas"];
-  var Impressor_DownScaleCanvas = PS["Impressor.DownScaleCanvas"];
+  var Impressor_DownScaleImageData = PS["Impressor.DownScaleImageData"];
   var Impressor_Utils = PS["Impressor.Utils"];
   var Impressor_Types = PS["Impressor.Types"];     
   var main = Control_Monad_Aff.launchAff(Prelude.bind(Control_Monad_Aff.bindAff)(Control_Monad_Eff_Class.liftEff(Control_Monad_Aff.monadEffAff)(Impressor_Utils.createBlankImageData({
       w: 600.0, 
       h: 400.0
-  })))(function (_10) {
+  })))(function (_8) {
       return Prelude.bind(Control_Monad_Aff.bindAff)(Control_Monad_Eff_Class.liftEff(Control_Monad_Aff.monadEffAff)(Impressor_Utils.createBlankImageData({
           w: 300.0, 
           h: 200.0
-      })))(function (_9) {
-          return Prelude.bind(Control_Monad_Aff.bindAff)(Impressor_Utils.downScaleImageWorker(0.5)(_10)(_9))(function (_8) {
+      })))(function (_7) {
+          return Prelude.bind(Control_Monad_Aff.bindAff)(Impressor_Utils.downScaleImageWorker(0.5)(_8)(_7))(function (_6) {
               return Control_Monad_Aff_Console.log("f\xe4rdi!");
           });
       });
@@ -1943,58 +1943,59 @@ var PS = { };
           };
       };
   };
-  var createImages = function (_14) {
+  var createImages = function (_9) {
       return function (srcSize) {
           return function (targetSizes) {
-              var createImage = function (_15) {
-                  var targetHeight = Data_Maybe.maybe(_15.w / Impressor_Utils.aspectRatio(srcSize))(Prelude.id(Prelude.categoryFn))(_15.h);
-                  var croppingProps$prime = croppingProps(srcSize)(_15);
+              var createImage = function (_10) {
+                  var targetHeight = Data_Maybe.maybe(_10.w / Impressor_Utils.aspectRatio(srcSize))(Prelude.id(Prelude.categoryFn))(_10.h);
+                  var croppingProps$prime = croppingProps(srcSize)(_10);
                   var maxHeight = (function () {
-                      var _40 = croppingProps$prime.h <= targetHeight;
-                      if (_40) {
+                      var _22 = croppingProps$prime.h <= targetHeight;
+                      if (_22) {
                           return targetHeight;
                       };
-                      if (!_40) {
+                      if (!_22) {
                           return croppingProps$prime.h;
                       };
-                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _40.constructor.name ]);
+                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _22.constructor.name ]);
                   })();
                   var maxWidth = (function () {
-                      var _41 = croppingProps$prime.w <= _15.w;
-                      if (_41) {
-                          return _15.w;
+                      var _23 = croppingProps$prime.w <= _10.w;
+                      if (_23) {
+                          return _10.w;
                       };
-                      if (!_41) {
+                      if (!_23) {
                           return croppingProps$prime.w;
                       };
-                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _41.constructor.name ]);
+                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _23.constructor.name ]);
                   })();
-                  var srcScale = croppingProps$prime.w / _15.w;
+                  var srcScale = croppingProps$prime.w / _10.w;
                   return function __do() {
-                      Graphics_Canvas.setCanvasWidth(maxWidth)(_14.canvas)();
-                      Graphics_Canvas.setCanvasHeight(maxHeight)(_14.canvas)();
-                      Graphics_Canvas.drawImageFull(_14.ctx)(_14.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(maxWidth)(maxHeight)();
-                      var _4 = (function () {
-                          var _42 = srcScale > 1.0;
-                          if (_42) {
-                              return Impressor_DownScaleCanvas.downScaleCanvas(1.0 / srcScale)(_14.canvas);
-                          };
-                          if (!_42) {
-                              return Prelude.pure(Control_Monad_Eff.applicativeEff)(_14.canvas);
-                          };
-                          throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _42.constructor.name ]);
-                      })()();
-                      var _3 = Impressor_Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_4)();
-                      Graphics_Canvas.clearRect(_14.ctx)({
-                          x: 0.0, 
-                          y: 0.0, 
-                          w: _15.w, 
+                      Graphics_Canvas.setCanvasWidth(maxWidth)(_9.canvas)();
+                      Graphics_Canvas.setCanvasHeight(maxHeight)(_9.canvas)();
+                      Graphics_Canvas.drawImageFull(_9.ctx)(_9.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(maxWidth)(maxHeight)();
+                      var _2 = Graphics_Canvas.getImageData(_9.ctx)(0.0)(0.0)(maxWidth)(maxHeight)();
+                      var _1 = Impressor_Utils.createBlankImageData({
+                          w: _10.w, 
                           h: targetHeight
                       })();
-                      return Prelude["return"](Control_Monad_Eff.applicativeEff)({
-                          name: _15.name, 
-                          blob: Impressor_Utils.unsafeDataUrlToBlob(_3)
-                      })();
+                      return (function () {
+                          var resImageData = Impressor_DownScaleImageData.downScaleImageData(srcScale)(_2)(_1);
+                          return function __do() {
+                              Graphics_Canvas.putImageData(_9.ctx)(resImageData)(0.0)(0.0)();
+                              var _0 = Impressor_Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_9.canvas)();
+                              Graphics_Canvas.clearRect(_9.ctx)({
+                                  x: 0.0, 
+                                  y: 0.0, 
+                                  w: _10.w, 
+                                  h: targetHeight
+                              })();
+                              return Prelude["return"](Control_Monad_Eff.applicativeEff)({
+                                  name: _10.name, 
+                                  blob: Impressor_Utils.unsafeDataUrlToBlob(_0)
+                              })();
+                          };
+                      })()();
                   };
               };
               return Data_Traversable.traverse(Data_Traversable.traversableArray)(Control_Monad_Eff.applicativeEff)(createImage)(targetSizes);
@@ -2013,14 +2014,14 @@ var PS = { };
           var createImages$prime = function (img_1) {
               return function (targetSizes) {
                   return function __do() {
-                      var _7 = Impressor_Utils.createCanvasElement();
-                      var _6 = Graphics_Canvas.getContext2D(_7)();
-                      var _5 = Impressor_Utils.getImageSize(img_1)();
+                      var _5 = Impressor_Utils.createCanvasElement();
+                      var _4 = Graphics_Canvas.getContext2D(_5)();
+                      var _3 = Impressor_Utils.getImageSize(img_1)();
                       return createImages({
-                          canvas: _7, 
-                          ctx: _6, 
+                          canvas: _5, 
+                          ctx: _4, 
                           img: img_1
-                      })(_5)(targetSizes)();
+                      })(_3)(targetSizes)();
                   };
               };
           };
