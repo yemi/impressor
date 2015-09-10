@@ -1,5 +1,6 @@
 "use strict";
 
+// Algorithm by @GameAlchemist at http://stackoverflow.com/a/19144434/1584052
 function scaleDownImageData (scale, srcImageData, blankTargetImageData) {
   if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
   var sqScale = scale * scale; // square scale = area of source pixel within target
@@ -16,7 +17,6 @@ function scaleDownImageData (scale, srcImageData, blankTargetImageData) {
   var crossX = false; // does scaled px cross its current px right border ?
   var crossY = false; // does scaled px cross its current px bottom border ?
   var sBuffer = srcImageData.data; // source buffer 8 bit rgba
-  // var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
   var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
   var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
   /* untested !

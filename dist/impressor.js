@@ -128,7 +128,7 @@ var PS = { };
       return eq(__dict_Eq_7);
   };
   var $$const = function (a) {
-      return function (_116) {
+      return function (_82) {
           return a;
       };
   };
@@ -168,9 +168,9 @@ var PS = { };
   var ap = function (__dict_Monad_30) {
       return function (f) {
           return function (a) {
-              return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(f)(function (_31) {
-                  return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(a)(function (_30) {
-                      return $$return(__dict_Monad_30["__superclass_Prelude.Applicative_0"]())(_31(_30));
+              return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(f)(function (_16) {
+                  return bind(__dict_Monad_30["__superclass_Prelude.Bind_1"]())(a)(function (_15) {
+                      return $$return(__dict_Monad_30["__superclass_Prelude.Applicative_0"]())(_16(_15));
                   });
               });
           };
@@ -525,14 +525,14 @@ var PS = { };
   })();
   var maybe = function (b) {
       return function (f) {
-          return function (_307) {
-              if (_307 instanceof Nothing) {
+          return function (_249) {
+              if (_249 instanceof Nothing) {
                   return b;
               };
-              if (_307 instanceof Just) {
-                  return f(_307.value0);
+              if (_249 instanceof Just) {
+                  return f(_249.value0);
               };
-              throw new Error("Failed pattern match at Data.Maybe line 26, column 1 - line 27, column 1: " + [ b.constructor.name, f.constructor.name, _307.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Maybe line 26, column 1 - line 27, column 1: " + [ b.constructor.name, f.constructor.name, _249.constructor.name ]);
           };
       };
   };
@@ -729,46 +729,46 @@ var PS = { };
       return Right;
   })();
   var functorEither = new Prelude.Functor(function (f) {
-      return function (_426) {
-          if (_426 instanceof Left) {
-              return new Left(_426.value0);
+      return function (_334) {
+          if (_334 instanceof Left) {
+              return new Left(_334.value0);
           };
-          if (_426 instanceof Right) {
-              return new Right(f(_426.value0));
+          if (_334 instanceof Right) {
+              return new Right(f(_334.value0));
           };
-          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _426.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 52, column 1 - line 56, column 1: " + [ f.constructor.name, _334.constructor.name ]);
       };
   });
   var either = function (f) {
       return function (g) {
-          return function (_425) {
-              if (_425 instanceof Left) {
-                  return f(_425.value0);
+          return function (_333) {
+              if (_333 instanceof Left) {
+                  return f(_333.value0);
               };
-              if (_425 instanceof Right) {
-                  return g(_425.value0);
+              if (_333 instanceof Right) {
+                  return g(_333.value0);
               };
-              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _425.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Either line 28, column 1 - line 29, column 1: " + [ f.constructor.name, g.constructor.name, _333.constructor.name ]);
           };
       };
   }; 
   var applyEither = new Prelude.Apply(function () {
       return functorEither;
-  }, function (_428) {
+  }, function (_336) {
       return function (r) {
-          if (_428 instanceof Left) {
-              return new Left(_428.value0);
+          if (_336 instanceof Left) {
+              return new Left(_336.value0);
           };
-          if (_428 instanceof Right) {
-              return Prelude["<$>"](functorEither)(_428.value0)(r);
+          if (_336 instanceof Right) {
+              return Prelude["<$>"](functorEither)(_336.value0)(r);
           };
-          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _428.constructor.name, r.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 92, column 1 - line 116, column 1: " + [ _336.constructor.name, r.constructor.name ]);
       };
   });
   var bindEither = new Prelude.Bind(function () {
       return applyEither;
   }, either(function (e) {
-      return function (_424) {
+      return function (_332) {
           return new Left(e);
       };
   })(function (a) {
@@ -817,8 +817,8 @@ var PS = { };
   var makeAff$prime = function (h) {
       return $foreign._makeAff(h);
   };
-  var launchAff = function (_1790) {
-      return runAff(Control_Monad_Eff_Exception.throwException)(Prelude["const"](Prelude.pure(Control_Monad_Eff.applicativeEff)(Prelude.unit)))($foreign._unsafeInterleaveAff(_1790));
+  var launchAff = function (_1389) {
+      return runAff(Control_Monad_Eff_Exception.throwException)(Prelude["const"](Prelude.pure(Control_Monad_Eff.applicativeEff)(Prelude.unit)))($foreign._unsafeInterleaveAff(_1389));
   };
   var functorAff = new Prelude.Functor(function (f) {
       return function (fa) {
@@ -1018,20 +1018,20 @@ var PS = { };
           return new Data_Either.Left(new TypeMismatch(tag, $foreign.tagOf(value)));
       };
   };
-  var showForeignError = new Prelude.Show(function (_450) {
-      if (_450 instanceof TypeMismatch) {
-          return "Type mismatch: expected " + (_450.value0 + (", found " + _450.value1));
+  var showForeignError = new Prelude.Show(function (_358) {
+      if (_358 instanceof TypeMismatch) {
+          return "Type mismatch: expected " + (_358.value0 + (", found " + _358.value1));
       };
-      if (_450 instanceof ErrorAtIndex) {
-          return "Error at array index " + (Prelude.show(Prelude.showInt)(_450.value0) + (": " + Prelude.show(showForeignError)(_450.value1)));
+      if (_358 instanceof ErrorAtIndex) {
+          return "Error at array index " + (Prelude.show(Prelude.showInt)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
       };
-      if (_450 instanceof ErrorAtProperty) {
-          return "Error at property " + (Prelude.show(Prelude.showString)(_450.value0) + (": " + Prelude.show(showForeignError)(_450.value1)));
+      if (_358 instanceof ErrorAtProperty) {
+          return "Error at property " + (Prelude.show(Prelude.showString)(_358.value0) + (": " + Prelude.show(showForeignError)(_358.value1)));
       };
-      if (_450 instanceof JSONError) {
-          return "JSON error: " + _450.value0;
+      if (_358 instanceof JSONError) {
+          return "JSON error: " + _358.value0;
       };
-      throw new Error("Failed pattern match: " + [ _450.constructor.name ]);
+      throw new Error("Failed pattern match: " + [ _358.constructor.name ]);
   });
   var readString = unsafeReadTagged("String");
   var readNumber = unsafeReadTagged("Number");  
@@ -1232,16 +1232,16 @@ var PS = { };
   var NullOrUndefined = function (x) {
       return x;
   };
-  var runNullOrUndefined = function (_454) {
-      return _454;
+  var runNullOrUndefined = function (_362) {
+      return _362;
   };
   var readNullOrUndefined = function (f) {
       return function (value) {
           if (Data_Foreign.isNull(value) || Data_Foreign.isUndefined(value)) {
               return Prelude.pure(Data_Either.applicativeEither)(Data_Maybe.Nothing.value);
           };
-          return Prelude["<$>"](Data_Either.functorEither)(function (_1695) {
-              return NullOrUndefined(Data_Maybe.Just.create(_1695));
+          return Prelude["<$>"](Data_Either.functorEither)(function (_1298) {
+              return NullOrUndefined(Data_Maybe.Just.create(_1298));
           })(f(value));
       };
   };
@@ -1273,8 +1273,8 @@ var PS = { };
   var readWith = function (__dict_IsForeign_1) {
       return function (f) {
           return function (value) {
-              return Data_Either.either(function (_2438) {
-                  return Data_Either.Left.create(f(_2438));
+              return Data_Either.either(function (_1879) {
+                  return Data_Either.Left.create(f(_1879));
               })(Data_Either.Right.create)(read(__dict_IsForeign_1)(value));
           };
       };
@@ -1444,15 +1444,6 @@ var PS = { };
       };
   };
 
-  exports.clearRect = function(ctx) {
-      return function(r) {
-          return function() {
-              ctx.clearRect(r.x, r.y, r.w, r.h);
-              return ctx;
-          };
-      };
-  };
-
   exports.getImageData = function(ctx) {
       return function(x) {
           return function(y) {
@@ -1526,16 +1517,35 @@ var PS = { };
   var Prelude = PS["Prelude"];
   var Data_Function = PS["Data.Function"];
   var Data_Maybe = PS["Data.Maybe"];
+  var Data_Foreign = PS["Data.Foreign"];
+  var Data_Foreign_Class = PS["Data.Foreign.Class"];
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
   exports["drawImageFull"] = $foreign.drawImageFull;
   exports["putImageData"] = $foreign.putImageData;
   exports["getImageData"] = $foreign.getImageData;
-  exports["clearRect"] = $foreign.clearRect;
   exports["setCanvasHeight"] = $foreign.setCanvasHeight;
   exports["setCanvasWidth"] = $foreign.setCanvasWidth;
   exports["getContext2D"] = $foreign.getContext2D;;
  
 })(PS["Graphics.Canvas"] = PS["Graphics.Canvas"] || {});
+(function(exports) {
+  /* global exports */
+  "use strict";          
+
+  exports.max = function (n1) {
+    return function (n2) {
+      return Math.max(n1, n2);
+    };
+  };                         
+ 
+})(PS["Math"] = PS["Math"] || {});
+(function(exports) {
+  // Generated by psc version 0.7.4.1
+  "use strict";
+  var $foreign = PS["Math"];
+  exports["max"] = $foreign.max;;
+ 
+})(PS["Math"] = PS["Math"] || {});
 (function(exports) {
   "use strict";
 
@@ -1558,7 +1568,6 @@ var PS = { };
     var crossX = false; // does scaled px cross its current px right border ?
     var crossY = false; // does scaled px cross its current px bottom border ?
     var sBuffer = srcImageData.data; // source buffer 8 bit rgba
-    // var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
     var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
     var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
     /* untested !
@@ -1647,16 +1656,17 @@ var PS = { };
       } // end for sx
     } // end for sy
 
-    var tByteBuffer = blankTargetImageData.data;
+    var resImageData = blankTargetImageData;
+    var tByteBuffer = resImageData.data;
     // convert float32 array into a UInt8Clamped Array
     var pxIndex = 0; //
     for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
-      tByteBuffer[tIndex] = Math.ceil(tBuffer[sIndex]);
+      tByteBuffer[tIndex    ] = Math.ceil(tBuffer[sIndex    ]);
       tByteBuffer[tIndex + 1] = Math.ceil(tBuffer[sIndex + 1]);
       tByteBuffer[tIndex + 2] = Math.ceil(tBuffer[sIndex + 2]);
       tByteBuffer[tIndex + 3] = 255;
     }
-    return blankTargetImageData;
+    return resImageData;
   }
  
 })(PS["Impressor.DownScaleImageData"] = PS["Impressor.DownScaleImageData"] || {});
@@ -1829,25 +1839,25 @@ var PS = { };
       };
   };
   var createCanvasElement = function __do() {
-      var _3 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
-      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Impressor_Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_3))();
+      var _0 = Prelude["<$>"](Control_Monad_Eff.functorEff)(DOM_HTML_Types.htmlDocumentToDocument)(Control_Bind["=<<"](Control_Monad_Eff.bindEff)(DOM_HTML_Window.document)(DOM_HTML.window))();
+      return Prelude["<$>"](Control_Monad_Eff.functorEff)(Impressor_Types.elementToCanvasElement)(DOM_Node_Document.createElement("canvas")(_0))();
   };
-  var createBlankImageData = function (_14) {
+  var createBlankImageData = function (_11) {
       return function __do() {
-          var _5 = createCanvasElement();
-          var _4 = Graphics_Canvas.getContext2D(_5)();
-          Graphics_Canvas.setCanvasWidth(_14.w)(_5)();
-          Graphics_Canvas.setCanvasHeight(_14.h)(_5)();
-          return Graphics_Canvas.getImageData(_4)(0.0)(0.0)(_14.w)(_14.h)();
+          var _2 = createCanvasElement();
+          var _1 = Graphics_Canvas.getContext2D(_2)();
+          Graphics_Canvas.setCanvasWidth(_11.w)(_2)();
+          Graphics_Canvas.setCanvasHeight(_11.h)(_2)();
+          return Graphics_Canvas.getImageData(_1)(0.0)(0.0)(_11.w)(_11.h)();
       };
   };
   var aspectRatio$prime = function (sourceRatio) {
-      return function (_16) {
-          return _16.w / Data_Maybe.maybe(_16.w / sourceRatio)(Prelude.id(Prelude.categoryFn))(_16.h);
+      return function (_13) {
+          return _13.w / Data_Maybe.maybe(_13.w / sourceRatio)(Prelude.id(Prelude.categoryFn))(_13.h);
       };
   };
-  var aspectRatio = function (_15) {
-      return _15.w / _15.h;
+  var aspectRatio = function (_12) {
+      return _12.w / _12.h;
   };
   exports["downScaleImageWorker"] = downScaleImageWorker;
   exports["aspectRatio'"] = aspectRatio$prime;
@@ -1864,6 +1874,7 @@ var PS = { };
   "use strict";
   var Prelude = PS["Prelude"];
   var DOM = PS["DOM"];
+  var $$Math = PS["Math"];
   var Data_Traversable = PS["Data.Traversable"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Maybe_Unsafe = PS["Data.Maybe.Unsafe"];
@@ -1949,47 +1960,34 @@ var PS = { };
               var createImage = function (_10) {
                   var targetHeight = Data_Maybe.maybe(_10.w / Impressor_Utils.aspectRatio(srcSize))(Prelude.id(Prelude.categoryFn))(_10.h);
                   var croppingProps$prime = croppingProps(srcSize)(_10);
-                  var maxHeight = (function () {
-                      var _22 = croppingProps$prime.h <= targetHeight;
-                      if (_22) {
-                          return targetHeight;
-                      };
-                      if (!_22) {
-                          return croppingProps$prime.h;
-                      };
-                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _22.constructor.name ]);
-                  })();
-                  var maxWidth = (function () {
-                      var _23 = croppingProps$prime.w <= _10.w;
-                      if (_23) {
-                          return _10.w;
-                      };
-                      if (!_23) {
-                          return croppingProps$prime.w;
-                      };
-                      throw new Error("Failed pattern match at Impressor line 58, column 3 - line 59, column 3: " + [ _23.constructor.name ]);
-                  })();
+                  var maxHeight = $$Math.max(targetHeight)(croppingProps$prime.h);
+                  var maxWidth = $$Math.max(_10.w)(croppingProps$prime.w);
                   var srcScale = croppingProps$prime.w / _10.w;
                   return function __do() {
                       Graphics_Canvas.setCanvasWidth(maxWidth)(_9.canvas)();
                       Graphics_Canvas.setCanvasHeight(maxHeight)(_9.canvas)();
                       Graphics_Canvas.drawImageFull(_9.ctx)(_9.img)(croppingProps$prime.left)(croppingProps$prime.top)(croppingProps$prime.w)(croppingProps$prime.h)(0.0)(0.0)(maxWidth)(maxHeight)();
                       var _2 = Graphics_Canvas.getImageData(_9.ctx)(0.0)(0.0)(maxWidth)(maxHeight)();
+                      Graphics_Canvas.setCanvasWidth(_10.w)(_9.canvas)();
+                      Graphics_Canvas.setCanvasHeight(targetHeight)(_9.canvas)();
                       var _1 = Impressor_Utils.createBlankImageData({
                           w: _10.w, 
                           h: targetHeight
                       })();
                       return (function () {
-                          var resImageData = Impressor_DownScaleImageData.downScaleImageData(srcScale)(_2)(_1);
+                          var resImageData = (function () {
+                              var _24 = srcScale > 1.0;
+                              if (_24) {
+                                  return Impressor_DownScaleImageData.downScaleImageData(1.0 / srcScale)(_2)(_1);
+                              };
+                              if (!_24) {
+                                  return _2;
+                              };
+                              throw new Error("Failed pattern match at Impressor line 89, column 9 - line 92, column 5: " + [ _24.constructor.name ]);
+                          })();
                           return function __do() {
                               Graphics_Canvas.putImageData(_9.ctx)(resImageData)(0.0)(0.0)();
                               var _0 = Impressor_Utils.canvasToDataURL_("image/jpeg")(imageQuality)(_9.canvas)();
-                              Graphics_Canvas.clearRect(_9.ctx)({
-                                  x: 0.0, 
-                                  y: 0.0, 
-                                  w: _10.w, 
-                                  h: targetHeight
-                              })();
                               return Prelude["return"](Control_Monad_Eff.applicativeEff)({
                                   name: _10.name, 
                                   blob: Impressor_Utils.unsafeDataUrlToBlob(_0)

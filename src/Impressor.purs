@@ -1,8 +1,8 @@
 module Impressor where
 
 import Prelude
-
 import DOM (DOM())
+import Math (max)
 
 import Data.Traversable (traverse)
 import Data.Maybe (maybe)
@@ -57,8 +57,13 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
 
   createImage :: TargetSize -> Eff (dom :: DOM, canvas :: Canvas | eff) ProcessedImage
   createImage (TargetSize targetSize) = do
+
+    -- | Set canvas size to be the same as max targetSize srcSize so we can get image data for
+    -- | the entire, cropped but non down scaled, image
     setCanvasWidth maxWidth canvas
     setCanvasHeight maxHeight canvas
+
+    -- | Draw the cropped, non down scaled image to the context
     drawImageFull ctx
                   img
                   croppingProps'.left -- Amount to crop from the left
@@ -70,22 +75,35 @@ createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse 
                   maxWidth -- Scale it up to target width or don't scale at all
                   maxHeight -- Scale it up to target height or don't scale at all
 
-    -- For better image quality, use the downScaleCanvas algorithm when scaling down images
-    -- canvas' <- if srcScale > 1.0 then downScaleCanvas (1.0 / srcScale) canvas else pure canvas
+    -- | Get image data for the cropped, non down scaled image
     srcImageData <- getImageData ctx 0.0 0.0 maxWidth maxHeight
-    blankTargetImageData <- createBlankImageData { w:targetSize.w, h:targetHeight }
-    let resImageData = downScaleImageData srcScale srcImageData blankTargetImageData
+
+    -- | Since we have our srcImageData, prepare final image output by matching canvas size with target size
+    -- | TODO: dont call this function if there is no need to down scale the image
+    setCanvasWidth targetWidth canvas
+    setCanvasHeight targetHeight canvas
+
+    -- | Create a blank image data object for the down scaling algorithm
+    -- | TODO: dont call this function if there is no need to down scale the image
+    blankTargetImageData <- createBlankImageData { w:targetWidth, h:targetHeight }
+
+    -- | For better image quality, use the downScaleImageData algorithm when scaling down images
+    let resImageData = if srcScale > 1.0 then downScaleImageData (1.0 / srcScale) srcImageData blankTargetImageData else srcImageData
+
+    -- | Draw the resulting image to the context
     putImageData ctx resImageData 0.0 0.0
+
+    -- | Get data URL from the resulting canvas and return our processed image
     dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality canvas
-    clearRect ctx { x:0.0, y:0.0, w:targetSize.w, h:targetHeight } -- Clear the canvas
     return { name: targetSize.name, blob: unsafeDataUrlToBlob dataUrl }
 
     where
     croppingProps' = croppingProps srcSize (TargetSize targetSize)
     targetHeight = maybe (targetSize.w / aspectRatio srcSize) id targetSize.h
-    maxWidth = if croppingProps'.w <= targetSize.w then targetSize.w else croppingProps'.w
-    maxHeight = if croppingProps'.h <= targetHeight then targetHeight else croppingProps'.h
-    srcScale = croppingProps'.w / targetSize.w
+    targetWidth = targetSize.w
+    srcScale = croppingProps'.w / targetWidth
+    maxWidth = max targetWidth croppingProps'.w
+    maxHeight = max targetHeight croppingProps'.h
 
 impress :: forall eff. Foreign -> Foreign -> Eff (dom :: DOM, canvas :: Canvas, err :: EXCEPTION | eff) (Array ProcessedImage)
 impress img sizes = either parsingErrorHandler (createImages' parsedImg) parsedSizes
@@ -106,9 +124,3 @@ impress img sizes = either parsingErrorHandler (createImages' parsedImg) parsedS
     ctx <- getContext2D canvas
     srcSize <- getImageSize img
     createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes
-
-main = launchAff $ do
-  srcImageData <- liftEff $ createBlankImageData { w:600.0, h:400.0 }
-  blankTargetImageData <- liftEff $ createBlankImageData { w:300.0, h:200.0 }
-  resImageData <- downScaleImageWorker 0.5 srcImageData blankTargetImageData
-  log "färdi!"

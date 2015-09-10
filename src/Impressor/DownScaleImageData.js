@@ -19,7 +19,6 @@ exports.downScaleImageDataImpl = function (scale, srcImageData, blankTargetImage
   var crossX = false; // does scaled px cross its current px right border ?
   var crossY = false; // does scaled px cross its current px bottom border ?
   var sBuffer = srcImageData.data; // source buffer 8 bit rgba
-  // var sBuffer = cv.getContext('2d').getImageData(0, 0, sw, sh).data; // source buffer 8 bit rgba
   var tBuffer = new Float32Array(3 * tw * th); // target buffer Float32 rgb
   var sR = 0, sG = 0,  sB = 0; // source's current point r,g,b
   /* untested !
@@ -108,14 +107,15 @@ exports.downScaleImageDataImpl = function (scale, srcImageData, blankTargetImage
     } // end for sx
   } // end for sy
 
-  var tByteBuffer = blankTargetImageData.data;
+  var resImageData = blankTargetImageData;
+  var tByteBuffer = resImageData.data;
   // convert float32 array into a UInt8Clamped Array
   var pxIndex = 0; //
   for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
-    tByteBuffer[tIndex] = Math.ceil(tBuffer[sIndex]);
+    tByteBuffer[tIndex    ] = Math.ceil(tBuffer[sIndex    ]);
     tByteBuffer[tIndex + 1] = Math.ceil(tBuffer[sIndex + 1]);
     tByteBuffer[tIndex + 2] = Math.ceil(tBuffer[sIndex + 2]);
     tByteBuffer[tIndex + 3] = 255;
   }
-  return blankTargetImageData;
+  return resImageData;
 }
