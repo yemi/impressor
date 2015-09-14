@@ -11,13 +11,13 @@ import Data.Foreign (Foreign(), ForeignError(), F(), unsafeFromForeign)
 import Data.Foreign.Class (read)
 import Data.Either (Either(..), either)
 import Data.Monoid
-import Data.Functor (($>))
+import Data.Functor (($>), (<$))
+import Data.Function (Fn1(), runFn1)
 
 import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Exception (EXCEPTION(), error, throwException)
-import Control.Monad.Aff (launchAff)
-import Control.Monad.Aff.Console (log)
+import Control.Monad.Aff (Aff(), launchAff, runAff)
 
 import Graphics.Canvas
   ( Canvas()
@@ -33,9 +33,10 @@ import Graphics.Canvas
   , clearRect
   )
 
-import Impressor.DownScaleImage (downScaleImage)
+import Impressor.Workers (downScaleImageWorker)
 import Impressor.Utils
 import Impressor.Types
+import Impressor.Effects
 
 imageQuality :: Number
 imageQuality = 0.80
@@ -51,82 +52,84 @@ croppingProps src target = { left: left, top: top, w: width, h: height }
   width = if srcHasHigherAspectRatioThanTarget then src.h * targetAspectRatio else src.w
   height = if srcHasHigherAspectRatioThanTarget then src.h else src.w / targetAspectRatio
 
-createImages :: forall a eff. CanvasPackage -> Size2D a -> Array TargetSize -> Eff (dom :: DOM, canvas :: Canvas | eff) (Array ProcessedImage)
+createImages :: forall a eff. CanvasPackage -> Size2D a -> Array TargetSize -> Aff (dom :: DOM, canvas :: Canvas | eff) (Array ProcessedImage)
 createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes = traverse createImage targetSizes
   where
 
-  createImage :: TargetSize -> Eff (dom :: DOM, canvas :: Canvas | eff) ProcessedImage
+  createImage :: TargetSize -> Aff (dom :: DOM, canvas :: Canvas | eff) ProcessedImage
   createImage (TargetSize targetSize) = do
 
     -- | Set canvas size to be the same as max targetSize srcSize so we can get image data for
     -- | the entire, cropped but non down scaled, image
-    setCanvasWidth maxWidth canvas
-    setCanvasHeight maxHeight canvas
+    liftEff $ setCanvasWidth maxWidth canvas >>= setCanvasHeight maxHeight
 
     -- | Draw the cropped, non down scaled image to the context
-    drawImageFull ctx
-                  img -- Source image
-                  croppingProps'.left -- Amount to crop from the left
-                  croppingProps'.top -- Amount to crop from the top
-                  croppingProps'.w -- Width of the cropped, unscaled image
-                  croppingProps'.h -- Height of the cropped, unscaled image
-                  0.0 -- Left padding
-                  0.0 -- Top padding
-                  maxWidth -- Scale it up to target width or don't scale at all
-                  maxHeight -- Scale it up to target height or don't scale at all
+    liftEff $ drawImageFull ctx
+                            img -- Source image
+                            croppingProps'.left -- Amount to crop from the left
+                            croppingProps'.top -- Amount to crop from the top
+                            croppingProps'.w -- Width of the cropped, unscaled image
+                            croppingProps'.h -- Height of the cropped, unscaled image
+                            0.0 -- Left padding
+                            0.0 -- Top padding
+                            maxWidth -- Scale it up to target width or don't scale at all
+                            maxHeight -- Scale it up to target height or don't scale at all
 
     -- | Get image data for the cropped, non down scaled image
-    srcImageData <- getImageData ctx 0.0 0.0 maxWidth maxHeight
+    srcImageData <- liftEff $ getImageData ctx 0.0 0.0 maxWidth maxHeight
 
-    -- | Since we have our srcImageData, prepare final image output by matching the canvas size with the target size
-    -- | TODO: dont call these functions if there is no need to down scale the image
-    setCanvasWidth targetWidth canvas
-    setCanvasHeight targetHeight canvas
+    -- | Get the resulting image data
+    resImageData <- if srcScale > 1.0
+      then do
+        -- | Prepare final image output by matching the canvas size with the target size.
+        liftEff $ setCanvasWidth targetWidth canvas >>= setCanvasHeight targetHeight
 
-    -- | Create a blank image data object for the down scaling algorithm
-    -- | TODO: dont call this function if there is no need to down scale the image
-    blankTargetImageData <- createBlankImageData { w:targetWidth, h:targetHeight }
+        -- | Create a blank image data object for the down scaling algorithm
+        blankTargetImageData <- liftEff $ createBlankImageData { w:targetWidth, h:targetHeight }
 
-    -- | For better image quality, use the downScaleImage algorithm when scaling down images
-    let resImageData = if srcScale > 1.0 then downScaleImage (1.0 / srcScale) srcImageData blankTargetImageData else srcImageData
+        -- | For better image quality, use the downScaleImage algorithm when down scaling images
+        downScaleImageWorker (1.0 / srcScale) srcImageData blankTargetImageData
+      else
+        -- | If there is no need for down scaling, use the source image data we already have
+        pure srcImageData
 
     -- | Draw the resulting image to the context
-    putImageData ctx resImageData 0.0 0.0
+    liftEff $ putImageData ctx resImageData 0.0 0.0
 
     -- | Get data URL from the resulting canvas and return our processed image
-    dataUrl <- canvasToDataURL_ "image/jpeg" imageQuality canvas
+    dataUrl <- liftEff $ canvasToDataURL_ "image/jpeg" imageQuality canvas
     return { name: targetSize.name, blob: unsafeDataUrlToBlob dataUrl }
 
     where
     croppingProps' = croppingProps srcSize (TargetSize targetSize)
     targetHeight = maybe (targetSize.w / aspectRatio srcSize) id targetSize.h
     targetWidth = targetSize.w
-    srcScale = croppingProps'.w / targetWidth
     maxWidth = max targetWidth croppingProps'.w
     maxHeight = max targetHeight croppingProps'.h
+    srcScale = croppingProps'.w / targetWidth
 
-impress :: forall eff. Foreign -> Foreign -> Eff (dom :: DOM, canvas :: Canvas, err :: EXCEPTION | eff) (Array ProcessedImage)
-impress img sizes = either parsingErrorHandler (createImages' parsedImg) parsedSizes
+impress :: forall eff. Foreign ->
+                       Foreign ->
+                       Fn1 (Array ProcessedImage) (Eff (ImpressorEffects eff) Unit) ->
+                       Eff (ImpressorEffects eff) Unit
+impress img sizes cb = either parsingErrorHandler createImages' parsedArgs
   where
+  
+  parsedArgs :: F ParsedArgs
+  parsedArgs =
+    ParsedArgs <$> ({ img: _
+                    , sizes: _
+                    } <$> read img :: F ForeignCanvasImageSource
+                      <*> read sizes :: F (Array TargetSize))
 
-  parsedSizes :: F (Array TargetSize)
-  parsedSizes = read sizes
+  parsingErrorHandler :: forall eff. ForeignError -> Eff (err :: EXCEPTION | eff) Unit
+  parsingErrorHandler err = (throwException <<< error <<< show $ err) $> unit
 
-  parsedImg :: CanvasImageSource
-  parsedImg = unsafeFromForeign img
-
-  parsingErrorHandler :: forall m eff. (Monoid m) => ForeignError -> Eff (err :: EXCEPTION | eff) m
-  parsingErrorHandler err = (throwException <<< error <<< show $ err) $> mempty
-
-  createImages' :: forall eff. CanvasImageSource -> Array TargetSize -> Eff (dom :: DOM, canvas :: Canvas | eff) (Array ProcessedImage)
-  createImages' img targetSizes = do
+  createImages' :: ParsedArgs -> Eff (ImpressorEffects eff) Unit
+  createImages' (ParsedArgs { img:(ForeignCanvasImageSource img), sizes:targetSizes }) = do
     canvas <- createCanvasElement
     ctx <- getContext2D canvas
     srcSize <- getImageSize img
-    createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes
-
-main = launchAff $ do
-  srcImageData <- liftEff $ createBlankImageData { w:600.0, h:400.0 }
-  blankTargetImageData <- liftEff $ createBlankImageData { w:300.0, h:200.0 }
-  resImageData <- downScaleImageWorker 0.5 srcImageData blankTargetImageData
-  log "färdi!"
+    runAff (const $ pure unit)
+           (runFn1 cb)
+           (createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes)

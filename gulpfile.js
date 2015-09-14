@@ -28,8 +28,7 @@ gulp.task("prebundle", ["make"], function () {
       "Impressor",
       "Impressor.Utils",
       "Impressor.Types"
-    ],
-    main: "Impressor"
+    ]
   });
 });
 

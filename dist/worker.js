@@ -1,8 +1,7 @@
 "use strict";
 
 // Algorithm by @GameAlchemist at http://stackoverflow.com/a/19144434/1584052
-function scaleDownImageData (scale, srcImageData, blankTargetImageData) {
-  if (!(scale < 1) || !(scale > 0)) throw ('scale must be a positive number <1 ');
+var downScaleImage = function (scale, srcImageData, blankTargetImageData) {
   var sqScale = scale * scale; // square scale = area of source pixel within target
   var sw = srcImageData.width; // source image width
   var sh = srcImageData.height; // source image height
@@ -105,21 +104,21 @@ function scaleDownImageData (scale, srcImageData, blankTargetImageData) {
     } // end for sx
   } // end for sy
 
-  var tByteBuffer = blankTargetImageData.data;
+  var resImageData = blankTargetImageData;
+  var tByteBuffer = resImageData.data;
   // convert float32 array into a UInt8Clamped Array
   var pxIndex = 0; //
   for (sIndex = 0, tIndex = 0; pxIndex < tw * th; sIndex += 3, tIndex += 4, pxIndex++) {
-    tByteBuffer[tIndex] = Math.ceil(tBuffer[sIndex]);
+    tByteBuffer[tIndex    ] = Math.ceil(tBuffer[sIndex    ]);
     tByteBuffer[tIndex + 1] = Math.ceil(tBuffer[sIndex + 1]);
     tByteBuffer[tIndex + 2] = Math.ceil(tBuffer[sIndex + 2]);
     tByteBuffer[tIndex + 3] = 255;
   }
-  return blankTargetImageData;
+  return resImageData;
 }
 
 self.addEventListener('message', function (e) {
   var data = e.data;
-  var imageData = scaleDownImageData(data.scale, data.srcImageData, data.blankTargetImageData);
-  console.log(imageData);
+  var imageData = downScaleImage(data.scale, data.srcImageData, data.blankTargetImageData);
   self.postMessage(imageData);
 }, false);

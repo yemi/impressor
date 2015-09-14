@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://www.w3.org/2000/svg">
   <head>
     <title>Impressor</title>
-    
+
     <style>
       body {
         max-width: 800px;
@@ -57,14 +57,17 @@
 
       var fileImageOnLoad = function () {
         console.log("loading");
-        var processedImgs = PS.Impressor.impress(chosenImg)(sizes)();
-        console.log("loading done")
-        processedImgs.forEach(function(processedImg) {
-          console.log(processedImg)
-          var processedImgReader = new FileReader();
-          processedImgReader.onload = processedImgReaderOnLoad;
-          processedImgReader.readAsDataURL(processedImg.blob);
-        })
+        var processedImgs = PS.Impressor.impress(chosenImg)(sizes)(function (imgs) {
+          return function () {
+            console.log("loading done")
+            imgs.forEach(function(processedImg) {
+              console.log(processedImg)
+              var processedImgReader = new FileReader();
+              processedImgReader.onload = processedImgReaderOnLoad;
+              processedImgReader.readAsDataURL(processedImg.blob);
+            })
+          }
+        })();
       }
 
       var readerOnLoad = function (e){

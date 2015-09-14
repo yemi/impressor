@@ -6,7 +6,6 @@ module Impressor.Utils
   , createBlankImageData
   , aspectRatio
   , aspectRatio'
-  , downScaleImageWorker
   ) where
 
 import Prelude
@@ -22,7 +21,6 @@ import Data.Maybe(maybe)
 import Data.Maybe.Unsafe(fromJust)
 
 import Control.Monad.Eff (Eff())
-import Control.Monad.Aff (Aff(), makeAff)
 import Control.Bind ((=<<))
 
 import Graphics.Canvas
@@ -62,9 +60,3 @@ aspectRatio { w:w, h:h } = w / h
 
 aspectRatio' :: Number -> TargetSize -> Number
 aspectRatio' sourceRatio (TargetSize { w:w, h:h }) = w / (maybe (w / sourceRatio) id h)
-
-downScaleImageWorker :: forall e. Number -> ImageData -> ImageData -> Aff e ImageData
-downScaleImageWorker scale srcImageData blankTargetImageData =
-  makeAff (\error success -> downScaleImageWorkerImpl success scale srcImageData blankTargetImageData)
-
-foreign import downScaleImageWorkerImpl :: forall e. (ImageData -> Eff e Unit) -> Number -> ImageData -> ImageData -> Eff e Unit

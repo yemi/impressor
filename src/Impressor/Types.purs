@@ -4,8 +4,9 @@ module Impressor.Types
   , CanvasPackage()
   , TargetSize(..)
   , ProcessedImage()
+  , ForeignCanvasImageSource(..)
+  , ParsedArgs(..)
   , elementToCanvasElement
-  , htmlElementToCanvasImageSource
   ) where
 
 import Prelude
@@ -16,10 +17,11 @@ import DOM.HTML.Types (HTMLElement())
 
 import Graphics.Canvas (CanvasElement(), Context2D(), CanvasImageSource())
 
-import Data.Foreign (Foreign(), F())
+import Data.Foreign (Foreign(), F(), ForeignError(..))
 import Data.Foreign.Class (IsForeign, read, readProp)
 import Data.Foreign.NullOrUndefined (NullOrUndefined(..), runNullOrUndefined)
-import Data.Maybe
+import Data.Maybe (Maybe(..))
+import Data.Either(Either(..))
 import Data.Function (Fn3(), runFn3)
 
 type Size2D a =
@@ -49,18 +51,28 @@ newtype TargetSize = TargetSize
   , name :: String
   }
 
+newtype ParsedArgs = ParsedArgs
+  { img :: ForeignCanvasImageSource
+  , sizes :: Array TargetSize
+  }
+
+newtype ForeignCanvasImageSource = ForeignCanvasImageSource CanvasImageSource
+
 instance isForeignTargetSize :: IsForeign TargetSize where
   read obj =
     TargetSize <$> ({ w: _
-                   , h: _
-                   , name: _
-                   } <$> readProp "width" obj
-                     <*> (runNullOrUndefined <$> readProp "height" obj :: F (NullOrUndefined Number))
-                     <*> readProp "name" obj)
+                    , h: _
+                    , name: _
+                    } <$> readProp "width" obj
+                      <*> (runNullOrUndefined <$> readProp "height" obj :: F (NullOrUndefined Number))
+                      <*> readProp "name" obj)
+
+instance isForeignForeignCanvasImageSource :: IsForeign ForeignCanvasImageSource where
+  read img = ForeignCanvasImageSource <$> readCanvasImageSource img
 
 foreign import elementToCanvasElement :: Element -> CanvasElement
 
-htmlElementToCanvasImageSource :: forall eff. HTMLElement -> Maybe CanvasImageSource
-htmlElementToCanvasImageSource el = runFn3 htmlElementToCanvasImageSourceImpl el Just Nothing
+readCanvasImageSource :: Foreign -> F CanvasImageSource
+readCanvasImageSource img = runFn3 readCanvasImageSourceImpl img (Left <<< TypeMismatch "canvas image source element") Right
 
-foreign import htmlElementToCanvasImageSourceImpl :: forall r eff. Fn3 HTMLElement (CanvasImageSource -> r) r r
+foreign import readCanvasImageSourceImpl :: forall e. Fn3 Foreign (String -> e) (CanvasImageSource -> e) e
