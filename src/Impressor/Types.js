@@ -6,10 +6,10 @@ exports.elementToCanvasElement = function (el) {
     return el;
 };
 
-exports.htmlElementToCanvasImageSourceImpl = function (el, Just, Nothing) {
-    if (el && el instanceof HTMLImageElement) {
-        return Just(el);
+exports.readCanvasImageSourceImpl = function (foreign, Left, Right) {
+    if (foreign && foreign instanceof HTMLImageElement) {
+        return Right(foreign);
     } else {
-        return Nothing;
+        return Left(foreign.toString() + " :: " + typeof foreign);
     }
 };
