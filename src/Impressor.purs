@@ -114,7 +114,7 @@ impress :: forall eff. Foreign ->
                        Eff (ImpressorEffects eff) Unit
 impress img sizes cb = either parsingErrorHandler createImages' parsedArgs
   where
-  
+
   parsedArgs :: F ParsedArgs
   parsedArgs =
     ParsedArgs <$> ({ img: _

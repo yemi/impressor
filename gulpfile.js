@@ -3,8 +3,10 @@
 
 var gulp = require("gulp");
 var purescript = require("gulp-purescript");
-var webpack = require("webpack-stream");
 var uglify = require("gulp-uglify");
+var source = require('vinyl-source-stream');
+var browserify = require("browserify");
+var shim = require('browserify-shim');
 
 var sources = [
   "src/**/*.purs",
@@ -24,21 +26,23 @@ gulp.task("prebundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
     output: "dist/impressor.js",
-    module: [
-      "Impressor",
-      "Impressor.Utils",
-      "Impressor.Types"
-    ]
+    module: "Impressor"
   });
 });
 
-gulp.task("bundle", ["prebundle"], function () {
-  return gulp.src("dist/impressor.js")
-    .pipe(webpack({
-      resolve: { modulesDirectories: ["node_modules"] },
-      output: { filename: "impressor.js" }
-    }))
-    .pipe(gulp.dest("dist"));
+gulp.task("bundle", function () {
+  browserify({
+    entries: "./entry.js",
+    shim: {
+      impressor: {
+        path: "./dist/impressor.js",
+        exports: "PS"
+      }
+    }
+  })
+    .bundle()
+    .pipe(source("impressor-bundle.js"))
+    .pipe(gulp.dest("./dist"));
 });
 
 gulp.task("compress", ["prebundle"], function () {

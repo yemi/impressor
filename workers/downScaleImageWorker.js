@@ -117,8 +117,10 @@ var downScaleImage = function (scale, srcImageData, blankTargetImageData) {
   return resImageData;
 }
 
-self.addEventListener('message', function (e) {
-  var data = e.data;
-  var imageData = downScaleImage(data.scale, data.srcImageData, data.blankTargetImageData);
-  self.postMessage(imageData);
-}, false);
+module.exports = function (self) {
+  self.onmessage = function (ev) {
+    var data = ev.data;
+    var imageData = downScaleImage(data.scale, data.srcImageData, data.blankTargetImageData);
+    self.postMessage(imageData);
+  };
+};

@@ -1,6 +1,6 @@
 {
   "name": "impressor",
-  "private": true,
+  "private": false,
   "dependencies": {
     "purescript-aff": "latest",
     "purescript-canvas": "latest",

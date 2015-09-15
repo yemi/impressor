@@ -20,7 +20,7 @@
       <button id="submit">Create imagezzz!!!</button>
     </div>
 
-    <script src="../dist/impressor.js"></script>
+    <script src="../dist/impressor-bundle.js"></script>
 
     <script>
       var button = document.getElementById("submit");
@@ -57,17 +57,15 @@
 
       var fileImageOnLoad = function () {
         console.log("loading");
-        var processedImgs = PS.Impressor.impress(chosenImg)(sizes)(function (imgs) {
-          return function () {
-            console.log("loading done")
-            imgs.forEach(function(processedImg) {
-              console.log(processedImg)
-              var processedImgReader = new FileReader();
-              processedImgReader.onload = processedImgReaderOnLoad;
-              processedImgReader.readAsDataURL(processedImg.blob);
-            })
-          }
-        })();
+        impressor(chosenImg, sizes, function (imgs) {
+          console.log("loading done")
+          imgs.forEach(function(processedImg) {
+            console.log(processedImg)
+            var processedImgReader = new FileReader();
+            processedImgReader.onload = processedImgReaderOnLoad;
+            processedImgReader.readAsDataURL(processedImg.blob);
+          })
+        });
       }
 
       var readerOnLoad = function (e){
