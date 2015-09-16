@@ -1,4 +1,3 @@
-/* jshint node: true */
 "use strict";
 
 var gulp = require("gulp");
@@ -7,7 +6,6 @@ var uglify = require("gulp-uglify");
 var source = require("vinyl-source-stream");
 var browserify = require("browserify");
 var insert = require("gulp-insert");
-var runSequence = require("run-sequence");
 
 var sources = [
   "src/**/*.purs",
@@ -23,7 +21,7 @@ gulp.task("make", function () {
   return purescript.psc({ src: sources, ffi: foreigns });
 });
 
-gulp.task("prebundle", function () {
+gulp.task("pscBundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
     output: "dist/impressor.js",
@@ -31,13 +29,13 @@ gulp.task("prebundle", function () {
   })
 });
 
-gulp.task("exportPrebundle", function () {
+gulp.task("exportPscBundle", ["pscBundle"], function () {
   return gulp.src("dist/impressor.js")
     .pipe(insert.append("module.exports = PS;"))
-    .pipe(gulp.dest("dist"))
+    .pipe(gulp.dest("dist"));
 });
 
-gulp.task("bundle", function () {
+gulp.task("bundle", ["exportPscBundle"], function () {
   return browserify({
     entries: "entry.js",
     standalone: "Impressor"
@@ -47,12 +45,10 @@ gulp.task("bundle", function () {
     .pipe(gulp.dest("dist"));
 });
 
-gulp.task("compress", function () {
+gulp.task("minify", ["bundle"], function () {
   return gulp.src("dist/impressor.js")
     .pipe(uglify())
     .pipe(gulp.dest("dist"));
 })
 
-gulp.task("default", function () {
-  runSequence("make", "prebundle", "exportPrebundle", "bundle");
-});
+gulp.task("default", ["bundle"]);

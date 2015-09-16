@@ -1,6 +1,7 @@
 {
   "name": "impressor",
   "main": "dist/impressor.js",
+  "version": "0.1.0",
   "description": "Client side image processing using Canvas",
   "authors": [ "Fabian Rios <rocaboca@gmail.com>" ],
   "keywords": [
@@ -17,6 +18,7 @@
   },
   "ignore": [
     "**/.*",
+    "entry.js",
     "examples",
     "workers",
     "gulpfile.js",
