@@ -1,11 +1,26 @@
 {
   "name": "impressor",
-  "private": false,
+  "main": "dist/impressor.js",
+  "description": "Client side image processing using Canvas",
+  "authors": [ "Fabian Rios <rocaboca@gmail.com>" ],
+  "keywords": [
+    "canvas",
+    "image processor"
+  ],
+  "homepage": "https://github.com/yemi/impressor",
+  "license": "BSD",
   "dependencies": {
-    "purescript-aff": "latest",
-    "purescript-canvas": "latest",
-    "purescript-console": "latest",
-    "purescript-dom": "latest",
-    "purescript-free": "latest"
-  }
+    "purescript-aff": "~0.12.0",
+    "purescript-canvas": "~0.3.3",
+    "purescript-console": "~0.1.1",
+    "purescript-dom": "~0.2.6"
+  },
+  "ignore": [
+    "**/.*",
+    "examples",
+    "workers",
+    "gulpfile.js",
+    "*.json",
+    "*.md"
+  ]
 }
