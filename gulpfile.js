@@ -25,13 +25,13 @@ gulp.task("make", function () {
 gulp.task("pscBundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
-    output: "js/pscBundle.js",
+    output: "js/psc-bundle.js",
     module: "Impressor"
   })
 });
 
 gulp.task("exportPscBundle", ["pscBundle"], function () {
-  return gulp.src("js/pscBundle.js")
+  return gulp.src("js/psc-bundle.js")
     .pipe(insert.append("module.exports = PS;"))
     .pipe(gulp.dest("js"));
 });

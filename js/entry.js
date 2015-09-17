@@ -1,6 +1,6 @@
 "use strict";
 
-var impress = require("./pscBundle").Impressor.impress;
+var impress = require("./psc-bundle").Impressor.impress;
 
 // Sugar for Impressor function call
 var Impressor = function (img, sizes, cb) {
