@@ -11,7 +11,7 @@ import Data.Foreign (Foreign(), ForeignError(), F(), unsafeFromForeign)
 import Data.Foreign.Class (read)
 import Data.Either (Either(..), either)
 import Data.Monoid
-import Data.Functor (($>), (<$))
+import Data.Functor (($>))
 import Data.Function (Fn1(), runFn1)
 
 import Control.Monad.Eff (Eff())
@@ -130,6 +130,6 @@ impress img sizes cb = either parsingErrorHandler createImages' parsedArgs
     canvas <- createCanvasElement
     ctx <- getContext2D canvas
     srcSize <- getImageSize img
-    runAff (const $ pure unit)
+    runAff (throwException)
            (runFn1 cb)
            (createImages { canvas:canvas, ctx:ctx, img:img } srcSize targetSizes)

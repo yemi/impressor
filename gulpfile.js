@@ -6,6 +6,7 @@ var uglify = require("gulp-uglify");
 var source = require("vinyl-source-stream");
 var browserify = require("browserify");
 var insert = require("gulp-insert");
+var rename = require("gulp-rename");
 
 var sources = [
   "src/**/*.purs",
@@ -24,20 +25,20 @@ gulp.task("make", function () {
 gulp.task("pscBundle", ["make"], function () {
   return purescript.pscBundle({
     src: "output/**/*.js",
-    output: "dist/impressor.js",
+    output: "js/pscBundle.js",
     module: "Impressor"
   })
 });
 
 gulp.task("exportPscBundle", ["pscBundle"], function () {
-  return gulp.src("dist/impressor.js")
+  return gulp.src("js/pscBundle.js")
     .pipe(insert.append("module.exports = PS;"))
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest("js"));
 });
 
 gulp.task("bundle", ["exportPscBundle"], function () {
   return browserify({
-    entries: "entry.js",
+    entries: "js/entry.js",
     standalone: "Impressor"
   })
     .bundle()
@@ -45,9 +46,12 @@ gulp.task("bundle", ["exportPscBundle"], function () {
     .pipe(gulp.dest("dist"));
 });
 
-gulp.task("minify", ["bundle"], function () {
+gulp.task("uglify", ["bundle"], function () {
   return gulp.src("dist/impressor.js")
     .pipe(uglify())
+    .pipe(rename({
+       extname: '.min.js'
+     }))
     .pipe(gulp.dest("dist"));
 })
 

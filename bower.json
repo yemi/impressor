@@ -18,9 +18,8 @@
   },
   "ignore": [
     "**/.*",
-    "entry.js",
+    "js",
     "examples",
-    "workers",
     "gulpfile.js",
     "*.json",
     "*.md"

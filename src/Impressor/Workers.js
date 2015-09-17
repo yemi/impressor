@@ -3,7 +3,7 @@
 // module Impressor.Workers
 
 var work = require("webworkify");
-var downScaleImageWorker = require("../workers/downScaleImageWorker");
+var downScaleImageWorker = require("../js/downScaleImageWorker");
 var worker = work(downScaleImageWorker);
 
 exports.downScaleImageWorkerImpl = function (callback) {
