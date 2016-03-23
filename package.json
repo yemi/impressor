@@ -9,7 +9,7 @@
 
   "scripts": {
     "psc-bundle": "pulp build --main \"Impressor\" --optimise --skip-entry-point > js/impressorPscBundle.js && echo \"module.exports = PS;\" >> js/impressorPscBundle.js",
-    "bundle": "npm run psc-bundle && ./node_modules/.bin/webpack --progress --colors"
+    "bundle": "npm run psc-bundle && ./node_modules/.bin/webpack --progress --colors",
   },
 
   "devDependencies": {

@@ -47,5 +47,5 @@ impressor(image, sizes, function (images) {
 ```
 $ npm install
 $ bower install
-$ gulp
+$ npm run bundle
 ```
