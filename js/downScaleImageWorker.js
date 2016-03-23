@@ -123,4 +123,4 @@ module.exports = function (self) {
     var imageData = downScaleImage(data.scale, data.srcImageData, data.blankTargetImageData);
     self.postMessage(imageData);
   };
-};
+}

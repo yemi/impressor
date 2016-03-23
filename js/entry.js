@@ -1,15 +1,16 @@
-"use strict";
+"use strict"
 
-var impress = require("./psc-bundle").Impressor.impress;
+var impress = require("./impressorPscBundle").Impressor.impress
 
 // Sugar for Impressor function call
-var Impressor = function (img, sizes, cb) {
-  impress(img)(sizes)(function (imgs){
+var impressor = function (img, sizes, cb) {
+  impress(img)(sizes)(function (imgs) {
     return function () {
-      cb(imgs);
-      return;
+      cb(imgs)
+      return
     }
-  })();
-};
+  })()
+}
 
-module.exports = Impressor;
+module.exports = impressor
+

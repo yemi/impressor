@@ -51,13 +51,15 @@
       ];
 
       var processedImgReaderOnLoad = function (e) {
-        var blobStr = e.target.result;
-        console.log(blobStr)
+        var dataURL = e.target.result;
+        var image = new Image
+        image.src = dataURL
+        document.querySelector('body').appendChild(image)
       }
 
       var fileImageOnLoad = function () {
         console.log("loading");
-        Impressor(chosenImg, sizes, function (imgs) {
+        impressor(chosenImg, sizes, function (imgs) {
           console.log("loading done")
           imgs.forEach(function(processedImg) {
             console.log(processedImg)

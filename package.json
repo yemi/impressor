@@ -1,21 +1,23 @@
 {
   "name": "impressor",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Client side image processing using Canvas",
   "author": "Fabian Rios <rocaboca@gmail.com>",
   "repository": "https://github.com/yemi/impressor",
   "license": "BSD",
   "main": "js/entry.js",
-  "dependencies": {
-    "webworkify": "^1.0.2"
+
+  "scripts": {
+    "psc-bundle": "pulp build --main \"Impressor\" --optimise --skip-entry-point > js/impressorPscBundle.js && echo \"module.exports = PS;\" >> js/impressorPscBundle.js",
+    "bundle": "npm run psc-bundle && ./node_modules/.bin/webpack --progress --colors"
   },
+
   "devDependencies": {
-    "browserify": "^11.1.0",
-    "gulp": "^3.9.0",
-    "gulp-insert": "^0.5.0",
-    "gulp-purescript": "^0.7.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.3.0",
-    "vinyl-source-stream": "^1.1.0"
+    "webpack": "^1.12.14"
+  },
+
+  "dependencies": {
+    "webworkify-webpack": "^1.0.6"
   }
 }
+

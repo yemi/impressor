@@ -6,31 +6,25 @@ import Math (max)
 
 import Data.Traversable (traverse)
 import Data.Maybe (maybe)
-import Data.Maybe.Unsafe(fromJust)
-import Data.Foreign (Foreign(), ForeignError(), F(), unsafeFromForeign)
+import Data.Foreign (Foreign(), ForeignError(), F())
 import Data.Foreign.Class (read)
-import Data.Either (Either(..), either)
-import Data.Monoid
+import Data.Either (either)
 import Data.Functor (($>))
 import Data.Function (Fn1(), runFn1)
 
 import Control.Monad.Eff (Eff())
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Exception (EXCEPTION(), error, throwException)
-import Control.Monad.Aff (Aff(), launchAff, runAff)
+import Control.Monad.Aff (Aff(), runAff)
 
 import Graphics.Canvas
   ( Canvas()
-  , CanvasElement()
-  , Context2D()
-  , CanvasImageSource()
   , getContext2D
   , getImageData
   , putImageData
   , setCanvasWidth
   , setCanvasHeight
   , drawImageFull
-  , clearRect
   )
 
 import Impressor.Workers (downScaleImageWorker)

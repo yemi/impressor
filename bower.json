@@ -1,9 +1,13 @@
 {
   "name": "impressor",
-  "main": "dist/impressor.js",
-  "version": "0.1.0",
+  "main": [
+    "dist/impressor.js"
+  ],
+  "version": "0.1.2",
   "description": "Client side image processing using Canvas",
-  "authors": [ "Fabian Rios <rocaboca@gmail.com>" ],
+  "authors": [
+    "Fabian Rios <rocaboca@gmail.com>"
+  ],
   "keywords": [
     "canvas",
     "image processor"
@@ -14,7 +18,8 @@
     "purescript-aff": "~0.12.0",
     "purescript-canvas": "~0.3.3",
     "purescript-console": "~0.1.1",
-    "purescript-dom": "~0.2.6"
+    "purescript-dom": "~0.2.6",
+    "purescript-prelude": "~0.1.4"
   },
   "ignore": [
     "**/.*",
